@@ -1,0 +1,1 @@
+const r={year:"numeric",month:"numeric",day:"numeric",hour:"numeric",minute:"numeric",hour12:!1},o=new Intl.DateTimeFormat("ru-RU",r);function m(e){const n=new Date(e),t=o.format(n).split(",");return`${t[0]} ${t[1]}`}export{m as t};

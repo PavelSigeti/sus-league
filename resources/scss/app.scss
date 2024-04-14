@@ -277,17 +277,18 @@ h2 {
     margin-bottom: 30px;
 }
 .user-icon {
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
     overflow: hidden;
     border-radius: 50px;
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, .1);
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-right: 10px;
     img {
-        width: 70px;
-        height: 70px;
+        width: 55px;
+        height: 55px;
     }
 }
 .user {
@@ -303,20 +304,14 @@ h2 {
     flex-direction: row;
     align-items: center;
 }
-.user-nick {
-    font-weight: 500;
-    font-size: 1.2em;
-}
 .user-id {
     font-size: .9rem;
     color: #555;
 }
 .user-name {
-    font-size: .9em;
-    color: #555;
-}
-.user-icon {
-    margin-right: 20px;
+    font-size: 1.05em;
+    font-weight: 500;
+    color: #222;
 }
 .user-data {
     color: #242424;
@@ -449,7 +444,7 @@ h1 {
 .user-item {
     background-color: #eee;
     border-radius: 10px;
-    height: 90px;
+    height: 60px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -461,26 +456,14 @@ h1 {
     height: 32px;
     width: 32px;
 }
-.user-item__nickname {
-    font-size: 1.2em;
-    font-weight: 500;
-    margin-bottom: 5px;
-}
-.user-item__id {
-    font-size: .9rem;
-    color: #555;
-}
 .user-item__name {
-    color: #555;
+    color: #222;
+    font-weight: 500;
 }
 .user-item__content {
     width: 100%;
-    margin-right: 15px;
+    margin-right: 10px;
     position: relative;
-}
-.user-item__btn {
-    width: 110px;
-    flex-shrink: 0;
 }
 .form-input__user-search {
     height: 60px;
@@ -489,10 +472,6 @@ h1 {
     background-color: #ededed;
     font-size: 1.1em;
     width: 100%;
-}
-.btn-team {
-    height: 36px;
-    width: 110px;
 }
 .search-container {
     position: absolute;
@@ -516,14 +495,6 @@ h1 {
     &:hover {
         box-shadow:inset 0px 0px 0px 2px #242424;
     }
-}
-.search-candidate__nickname {
-    font-weight: 500;
-    margin-bottom: 5px;
-}
-.search-candidate__id {
-    font-size: .9rem;
-    color: #555;
 }
 .user-item__cancel {
     background-color: #eeeeeecc;
@@ -660,7 +631,6 @@ h1 {
 }
 .user-account__data {
     font-size: 1.1em;
-    margin-bottom: 30px;
 }
 .tabs {
     display: flex;
@@ -1187,6 +1157,11 @@ body .vue3-progress-bar-container .vue3-progress-bar {
 }
 .mb0 {
     margin-bottom: 0;
+}
+.btn-team {
+    height: 36px;
+    width: 40px;
+    font-size: 1.2em;
 }
 .btn-cancel {
     &:hover {

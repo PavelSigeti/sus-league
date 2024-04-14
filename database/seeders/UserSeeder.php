@@ -17,12 +17,13 @@ class UserSeeder extends Seeder
     {
         User::query()->insert([
             'name' => 'Кирилл',
-            'surname' => 'Admin',
+            'surname' => 'Админ',
+            'patronymic' => 'Админович',
             'email' => 'admin@admin.com',
             'password' => bcrypt('123123qq'),
 //            'team_id' => 1,
             'university_id' => 1,
-            'date' => '2000-01-01',
+            'birth' => '2000-01-01',
             'role' => 'admin',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now(),

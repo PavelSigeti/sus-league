@@ -35,7 +35,7 @@ class TeamInviteController extends Controller
         }
         if($user->id === $team->owner_id && count($team->users) < 3 && $userRequest->team_id === null){
             $teamInvite = TeamInvite::query()->create($request->only(['user_id', 'team_id']));
-            $response = $userRequest->only(['name', 'surname', 'nickname']);
+            $response = $userRequest->only(['name', 'surname']);
             $response['user_id'] = $request->user_id;
             $response['id'] = $teamInvite->id;
 

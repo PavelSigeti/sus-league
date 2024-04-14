@@ -39,9 +39,10 @@ export default {
                     .oneOf([yup.ref('password')], 'Пароли должны совподать'),
             }),
             yup.object({
-                surname: yup.string().required('Введите фамилию').min(2, 'От 2-х симвоволов'),
-                name: yup.string().required('Введите имя').min(2, 'От 2-х симвоволов'),
-                date: yup.date('Заполните дату рождения').required('Заполните дату рождения').max(new Date('2007-12-31'), 'Год должен быть позже 2008'),
+                surname: yup.string().required('Введите фамилию').min(2, 'От 2-х симвоволов').matches(/^[а-яёА-ЯЁ\s]*$/, 'Строка должна содержать только русские буквы'),
+                name: yup.string().required('Введите имя').min(2, 'От 2-х симвоволов').matches(/^[а-яёА-ЯЁ\s]*$/, 'Строка должна содержать только русские буквы'),
+                patronymic: yup.string().required('Введите отчество').min(2, 'От 2-х симвоволов').matches(/^[а-яёА-ЯЁ\s]*$/, 'Строка должна содержать только русские буквы'),
+                birth: yup.date('Заполните дату рождения').required('Заполните дату рождения').max(new Date('2007-12-31'), 'Год должен быть позже 2008'),
                 university_id: yup.object().nullable(),
             }),
         ];
@@ -50,6 +51,7 @@ export default {
                 loading.value = true;
                 await axios.get('/sanctum/csrf-cookie');
                 data.university_id = data.university_id ? data.university_id.code : null;
+                console.log('data', data);
                 await axios.post('/register', data);
                 store.dispatch('auth/login', {
                     email: data.email,

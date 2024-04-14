@@ -25,8 +25,7 @@ class UserUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'nickname' => 'required|string|min:3',
-            'university_id' => 'nullable|integer',
+            'university_id' => 'required|integer',
         ];
     }
 }

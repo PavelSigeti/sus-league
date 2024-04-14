@@ -28,7 +28,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $user = Auth::user()->only(['name', 'surname', 'nickname', 'id', 'role']);
+        $user = Auth::user()->only(['name', 'surname', 'patronymic', 'id', 'role']);
         return response()->json([
             'status' => 'success',
             'user' => $user,

@@ -52,10 +52,16 @@
                 <ErrorMessage class="alert" name="name" />
             </div>
             <div class="form-control">
-                <Field name="date" v-slot="{ field, errors }">
-                    <input v-bind="field" :type="dateInit ? 'date' : 'text'" @click="dateInit=true" :class="['form-input', {'invalid': !!errors.length} ]" placeholder="Дата рождения"  />
+                <Field name="patronymic" v-slot="{ field, errors }">
+                    <input v-bind="field" type="text" :class="['form-input', {'invalid': !!errors.length} ]" placeholder="Отчество"  />
                 </Field>
-                <ErrorMessage class="alert" name="date" />
+                <ErrorMessage class="alert" name="patronymic" />
+            </div>
+            <div class="form-control">
+                <Field name="birth" v-slot="{ field, errors }">
+                    <input v-bind="field" :type="dateInit ? 'date' : 'text'" @focus="dateInit=true" :class="['form-input', {'invalid': !!errors.length} ]" placeholder="Дата рождения"  />
+                </Field>
+                <ErrorMessage class="alert" name="birth" />
             </div>
             <div class="form-control">
                 <Field name="university_id" v-slot="{ field }">
@@ -96,7 +102,7 @@ export default {
     },
     setup(props, {emit}) {
         const store = useStore();
-        const step = ref(1);
+        const step = ref(0);
         const {universities, getUniversities} = useUniversities();
         const dateInit = ref(false);
 

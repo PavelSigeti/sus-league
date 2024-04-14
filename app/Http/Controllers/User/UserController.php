@@ -23,13 +23,13 @@ class UserController extends Controller
     public function search(UserSearchRequest $request)
     {
         $select = [
-          'id', 'nickname', 'name', 'surname',
+          'id', 'name', 'surname',
         ];
         $result = User::query()
             ->select($select)
             ->whereNull('team_id')
             ->where(function($query) use ($request) {
-                $query->where('nickname', 'LIKE', "%{$request->user}%");
+                $query->where('surname', 'LIKE', "%{$request->user}%");
                 $query->orWhere('id', 'LIKE', "%{$request->user}%");
             })
             ->get();
@@ -67,15 +67,10 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request)
     {
         $user = Auth::user();
-        if($user->university_id !== null) {
-            $user->update([
-                'nickname' => $request->nickname,
-            ]);
-        } else {
-            $user->update([
-                'nickname' => $request->nickname,
-                'university_id' => $request->university_id,
-            ]);
-        }
+        $user->update([
+            'university_id' => $request->university_id,
+        ]);
+
+        return true;
     }
 }

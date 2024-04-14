@@ -36,8 +36,8 @@ class TeamInviteRepository extends CoreRepository
     public function getByTeamId($id)
     {
         $columns = [
-          'name', 'surname', 'nickname',
-          'user_id', 'team_invites.id',
+            'name', 'surname', 'user_id',
+            'team_invites.id',
         ];
 
         $result = $this->startConditions()

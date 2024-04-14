@@ -17,12 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('name', 32);
             $table->string('surname', 32);
+            $table->string('patronymic', 32);
             $table->string('email')->unique();
 //            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->integer('team_id')->nullable();
             $table->integer('university_id')->nullable();
-            $table->date('date');
+            $table->date('birth');
             $table->string('role')->default('player');
             $table->rememberToken();
             $table->timestamps();

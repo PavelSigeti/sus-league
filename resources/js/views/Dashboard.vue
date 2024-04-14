@@ -13,10 +13,10 @@
                         <div class="btn btn-default btn-settings"  @click="upd">Понятно</div>
                     </div>
                 </div>
-<!--                <div class="col-lg-6 col-xl-5 col-xxl-4">-->
-<!--                    <TheTeamSettings />-->
-<!--                </div>-->
-                <div class="col-lg-12">
+                <div class="col-lg-6 col-xl-5 col-xxl-4">
+                    <TheTeamSettings />
+                </div>
+                <div class="col-lg-6 col-xl-7 col-xxl-8">
                     <div class="dashboard-item">
                         <h3>Актуальные гонки</h3>
                         <div class="dash-stage__container">

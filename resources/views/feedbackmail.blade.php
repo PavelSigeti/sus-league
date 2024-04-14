@@ -5,7 +5,7 @@
 <table border="0" style="margin:0; padding:0">
     <tr>
         <td>Имя:</td>
-        <td>{{$user->name}} {{$user->surname}} ({{$user->nickname}})</td>
+        <td>{{$user->name}} {{$user->surname}}</td>
     </tr>
     <tr>
         <td>Темa:</td>

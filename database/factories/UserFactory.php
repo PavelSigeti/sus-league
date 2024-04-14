@@ -20,8 +20,9 @@ class UserFactory extends Factory
         return [
             'name' => fake()->firstName(),
             'surname' => fake()->lastName(),
+            'patronymic' => fake()->firstName(),
             'university_id' => $this->faker->randomElement([null, 1, 2, 3]),
-            'date' => '2000-01-01',
+            'birth' => '2000-01-01',
             'email' => fake()->unique()->safeEmail(),
 //            'email_verified_at' => now(),
             'password' => bcrypt('123'), // 123

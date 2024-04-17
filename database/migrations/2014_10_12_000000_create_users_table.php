@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('email')->unique();
 //            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->integer('team_id')->nullable();
             $table->integer('university_id')->nullable();
             $table->date('birth');
             $table->string('role')->default('player');

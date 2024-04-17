@@ -43,7 +43,7 @@
 
 <script setup>
 import axios from "axios";
-import {ref, defineEmits, defineProps} from "vue";
+import {ref} from "vue";
 import {useStore} from "vuex";
 
 const store = useStore();

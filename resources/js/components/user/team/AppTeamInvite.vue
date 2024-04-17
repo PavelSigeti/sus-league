@@ -21,63 +21,56 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import {ref} from "vue";
 import axios from "axios";
 import {useStore} from "vuex";
 
-export default {
-    name: "AppTeamInvite",
-    props: ['invites', 'load'],
 
-    setup(props, {emit}) {
-        const invites = ref(props.invites);
-        const store = useStore();
+const invites = ref(props.invites);
+const store = useStore();
+const props = defineProps(['invites', 'load']);
+const emit = defineEmits(['load', 'update']);
 
-        const rejectInvite = async (id, idx) => {
-            emit('load');
-            try {
-                await axios.delete(`/api/team-invite/${id}/delete`);
-                invites.value.splice(idx, 1);
-                store.dispatch('notification/displayMessage', {
-                    value: 'Приглашение отклонено',
-                    type: 'primary',
-                });
-                emit('load');
-            } catch (e) {
-                emit('load');
-                store.dispatch('notification/displayMessage', {
-                    value: 'Ошибка при отклонении приглашения',
-                    type: 'error',
-                });
-            }
-        };
-        const acceptInvite = async (id) => {
-            emit('load');
-            try {
-                await axios.post(`/api/team-invite/${id}/accept`);
-                invites.value = [];
-                store.dispatch('notification/displayMessage', {
-                    value: 'Вы вступили в команду',
-                    type: 'primary',
-                });
-                emit('update');
-                emit('load');
-            } catch (e) {
-                console.log(e.message);
-                store.dispatch('notification/displayMessage', {
-                    value: 'Ошибка при вступлении в команду',
-                    type: 'error',
-                });
-                emit('load');
-            }
-        };
-
-        return {
-            invites, rejectInvite, acceptInvite
-        }
+const rejectInvite = async (id, idx) => {
+    emit('load');
+    try {
+        await axios.delete(`/api/team-invite/${id}/delete`);
+        invites.value.splice(idx, 1);
+        store.dispatch('notification/displayMessage', {
+            value: 'Приглашение отклонено',
+            type: 'primary',
+        });
+        emit('load');
+    } catch (e) {
+        emit('load');
+        store.dispatch('notification/displayMessage', {
+            value: 'Ошибка при отклонении приглашения',
+            type: 'error',
+        });
     }
-}
+};
+const acceptInvite = async (id) => {
+    emit('load');
+    try {
+        await axios.post(`/api/team-invite/${id}/accept`);
+        invites.value = [];
+        store.dispatch('notification/displayMessage', {
+            value: 'Вы вступили в команду',
+            type: 'primary',
+        });
+        emit('update');
+        emit('load');
+    } catch (e) {
+        console.log(e.message);
+        store.dispatch('notification/displayMessage', {
+            value: 'Ошибка при вступлении в команду',
+            type: 'error',
+        });
+        emit('load');
+    }
+};
+
 </script>
 
 <style scoped>

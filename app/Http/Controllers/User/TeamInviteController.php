@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\TeamInviteRepository;
+use App\Http\Repositories\TeamRepository;
 use App\Http\Requests\TeamInviteStoreRequest;
 use App\Models\TeamInvite;
 use App\Models\User;
@@ -12,12 +13,25 @@ use Illuminate\Support\Facades\Auth;
 class TeamInviteController extends Controller
 {
     protected $teamInviteRepository;
+    protected $teamRepository;
 
     public function __construct()
     {
         $this->teamInviteRepository = app(TeamInviteRepository::class);
+        $this->teamRepository = app(TeamRepository::class);
     }
 
+    public function show()
+    {
+        $user = Auth::user();
+        $teamAmount = $this->teamRepository->getTeamsAmount($user['id']);
+
+        if ($teamAmount >= 3) $this->teamInviteRepository->deleteUsersInvites($user['id']);
+
+        $invites = $this->teamInviteRepository->getByUserId($user['id']);
+
+        return ['invites' => $invites];
+    }
 
     public function store(TeamInviteStoreRequest $request)
     {

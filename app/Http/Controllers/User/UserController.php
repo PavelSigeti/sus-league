@@ -37,25 +37,7 @@ class UserController extends Controller
         return $result;
     }
 
-    public function removeTeammate(RemoveTeammateRequest $request)
-    {
-        $auth = Auth::user();
-        if($request->id === null) {
-            $user = $auth;
-        } else {
-            $user = User::find($request->id);
-        }
-        $team = Team::find($user->team_id);
 
-        if( ($auth->id === $user->id || $auth->id === $team->owner_id) && $user->id !== $team->owner_id) {
-            $user->update([
-                'team_id' => null,
-            ]);
-            return true;
-        } else {
-            return abort(400, 'Ошибка! Перезагрузите страницу');
-        }
-    }
 
     public function settings()
     {

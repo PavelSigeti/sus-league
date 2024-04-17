@@ -6,6 +6,12 @@ $grey: #EEEEEE;
 $blue: #187cff;
 $blue-light: #b9d3ff;
 
+.vs__dropdown-menu {
+    margin-top: 5px !important;
+    max-height: 180px;
+    height: 180px;
+}
+
 @font-face {
     font-family: "Jost";
     src: url("../fonts/jost-400.ttf");
@@ -451,6 +457,7 @@ h1 {
     align-items: center;
     margin-bottom: 15px;
     padding: 0px 15px;
+    flex-shrink: 0;
 }
 .user-item__icon {
     height: 32px;

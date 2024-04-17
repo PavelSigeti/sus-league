@@ -1,58 +1,49 @@
 <template>
     <div class="dashboard-item">
         <AppLoader v-if="loading" />
-        <h3>Команда</h3>
-        <div class="content-block" v-if="team">
-            <TeamContainer :team="team" :teammates="teammates" />
+        <h3>Команды</h3>
+        <div class="content-block  team-content" v-if="teams" >
+            <TeamContainer v-for="team in teams" :key="team.id"
+                           :team="team"
+                           @loading="(payload) => {loading = payload}"
+                           @update="getData()"
+            />
+        </div>
+
+        <div class="content-block">
+            <TeamInvites />
         </div>
 
         <AppCreateTeam
-            v-else
+            v-if="teams.length < 3"
             @loading="(payload) => {loading = payload}"
             @loadData="getData()"
         />
 
-        <div class="team-invites" v-if="teamInvites && teamInvites.length > 0">
-            <div
-                class="user-item"
-                v-for="(invite, idx) in teamInvites"
-                :key="invite.id"
-            >
-                <div class="user-item__content">
-                    <div class="user-item__name">
-                        {{invite.surname}} {{invite.name}} {{invite.patronymic}}
-                    </div>
-                </div>
-                <div class="user-item__btn" @click="cancelInvite(invite.id, idx)">
-                    <div class="btn btn-border btn-team btn-cancel" title="Отменить"><i class="ri-close-large-line"></i></div>
-                </div>
-            </div>
-        </div>
-
-        <AppUserSearchForm
-            v-if="owner && teamInvites && teammates && teamInvites.length < 3 - teammates.length"
-            :team_id="team.id"
-            @invite="addInvite"
-            @load="toggleLoad"
-        />
-        <button class="btn btn-border btn-full-width" v-if="owner" @click="leaveConfirm = true">Расформировать команду</button>
-        <AppConfirmation v-if="owner && leaveConfirm"
-                         @confirmation="deleteTeam"
-                         @close="leaveConfirm = false"
-                         question="Расформировать команду?"
-        />
-        <button
-            v-if="!owner && team"
-            class="btn btn-border btn-full-width"
-            @click="leaveConfirm = true"
-        >
-            Покинуть команду
-        </button>
-        <AppConfirmation v-if="!owner && leaveConfirm"
-                         @confirmation="removeTeammate(null, null)"
-                         @close="leaveConfirm = false"
-                         question="Покинуть команду?"
-        />
+<!--        <AppUserSearchForm-->
+<!--            v-if="owner && teamInvites && teammates && teamInvites.length < 3 - teammates.length"-->
+<!--            :team_id="team.id"-->
+<!--            @invite="addInvite"-->
+<!--            @load="toggleLoad"-->
+<!--        />-->
+<!--        <button class="btn btn-border btn-full-width" v-if="owner" @click="leaveConfirm = true">Расформировать команду</button>-->
+<!--        <AppConfirmation v-if="owner && leaveConfirm"-->
+<!--                         @confirmation="deleteTeam"-->
+<!--                         @close="leaveConfirm = false"-->
+<!--                         question="Расформировать команду?"-->
+<!--        />-->
+<!--        <button-->
+<!--            v-if="!owner && team"-->
+<!--            class="btn btn-border btn-full-width"-->
+<!--            @click="leaveConfirm = true"-->
+<!--        >-->
+<!--            Покинуть команду-->
+<!--        </button>-->
+<!--        <AppConfirmation v-if="!owner && leaveConfirm"-->
+<!--                         @confirmation="removeTeammate(null, null)"-->
+<!--                         @close="leaveConfirm = false"-->
+<!--                         question="Покинуть команду?"-->
+<!--        />-->
     </div>
     <div class="dashboard-item" v-if="invites && invites.length > 0">
         <AppTeamInvite
@@ -76,13 +67,13 @@ import TeamContainer from "@/components/user/team/TeamContainer.vue";
 
 const store = useStore();
 
-const team = ref();
-const invites = ref();
-const owner = ref(false);
-const teammates = ref([]);
-const teamInvites = ref();
+const teams = ref([]);
+// const invites = ref();
+// const owner = ref(false);
+// const teammates = ref([]);
+// const teamInvites = ref();
 const loading = ref(false);
-const leaveConfirm = ref(false);
+// const leaveConfirm = ref(false);
 
 const toggleLoad = () => {
     loading.value = !loading.value;
@@ -91,12 +82,12 @@ const toggleLoad = () => {
 const getData = async () => {
     loading.value = true;
     try {
-        const response = await axios.get('/api/team/edit');
-        team.value = response.data.team;
-        invites.value = response.data.invites;
-        owner.value = response.data.owner;
-        teammates.value = response.data.teammates;
-        teamInvites.value = response.data.teamInvites;
+        const response = await axios.get('/api/team/show');
+        teams.value = response.data;
+        // invites.value = response.data.invites;
+        // owner.value = response.data.owner;
+        // teammates.value = response.data.teammates;
+        // teamInvites.value = response.data.teamInvites;
     } catch (e) {
         console.log(e.message);
     }
@@ -130,30 +121,6 @@ const addInvite = (payload) => {
     teamInvites.value.push(payload);
 };
 
-const removeTeammate = async (id, idx) => {
-    loading.value = true;
-    try {
-        await axios.post(`/api/user/remove-teammate`, {id});
-        if(id === null) {
-            await getData();
-        } else {
-            teammates.value.splice(idx, 1);
-        }
-        store.dispatch('notification/displayMessage', {
-            value: 'Пользователь покинул команду',
-            type: 'primary',
-        });
-        leaveConfirm.value = false
-    } catch (e) {
-        console.log(e.message);
-        store.dispatch('notification/displayMessage', {
-            value: e.response.data.message,
-            type: 'error',
-        });
-    }
-    loading.value = false;
-};
-
 const deleteTeam = async () => {
     loading.value = true;
     try {
@@ -176,20 +143,7 @@ const deleteTeam = async () => {
 </script>
 
 <style scoped>
-.team-head {
-    display: flex;
-    justify-content: space-between;
-    height: 36px;
-    font-size: 1.2em;
-    i {
-        color: #555;
-        font-size: 1.5rem;
-        cursor: pointer;
-    }
-}
-.team-container {
-    padding: 15px;
-    box-shadow: 0px 0px 30px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+.team-container:last-child {
+    margin-bottom: 0;
 }
 </style>

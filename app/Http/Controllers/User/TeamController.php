@@ -4,9 +4,12 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\TeamInviteRepository;
+use App\Http\Repositories\TeamRepository;
+use App\Http\Requests\RemoveTeammateRequest;
 use App\Http\Requests\TeamStoreRequest;
 use App\Models\Team;
 use App\Models\TeamInvite;
+use App\Models\TeamUser;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,50 +17,45 @@ use Illuminate\Support\Facades\Auth;
 class TeamController extends Controller
 {
     protected $teamInviteRepository;
+    protected $teamRepository;
 
     public function __construct()
     {
         $this->teamInviteRepository = app(TeamInviteRepository::class);
+        $this->teamRepository = app(TeamRepository::class);
     }
 
-
-    public function edit()
+    public function show()
     {
         $user = Auth::user();
-        $owner = ($user->team_id !== null) ? ($user->id === $user->team->owner_id) ? true : false : false;
-        $invites = $this->teamInviteRepository->getByUserId($user->id);
+        return $user->teams;
+    }
 
-        $teamInvites = null;
-        $teammates = null;
-        if($user->team_id !== null) {
-            $teammates = $user->team->users;
-        }
-        if($owner) {
-            $teamInvites = $this->teamInviteRepository->getByTeamId($user->team_id);
-        }
+    public function edit($id)
+    {
+        $team = $this->teamRepository->getById($id);
 
-        return [
-            'team' => $user->team,
-            'invites' => $invites,
-            'owner' => $owner,
-            'teammates' => $teammates,
-            'teamInvites' => $teamInvites,
-        ];
+        return $team->users->map->only(['id', 'name', 'surname', 'patronymic']);
     }
 
     public function store(TeamStoreRequest $request)
     {
         $user = Auth::user();
-        $team = Team::query()->create([
+        $teamAmount = $this->teamRepository->getTeamsAmount($user['id']);
+        if ($teamAmount >= 3) return abort(422, 'Вы уже состоите в 3-x командах');
+
+        $data = [
             'name' => $request->name,
-            'owner_id' => $user->id,
-        ]);
+            'user_id' => $user['id'],
+        ];
 
-        $user->update([
-            'team_id' => $team->id,
-        ]);
+//        dd($data);
 
-        $this->teamInviteRepository->deleteUsersInvites($user->id);
+        $team = Team::query()->create($data);
+        $team->users()->sync($user['id']);
+        $teamAmount++;
+
+        if ($teamAmount >= 3) $this->teamInviteRepository->deleteUsersInvites($user['id']);
 
         return $team;
     }
@@ -79,5 +77,22 @@ class TeamController extends Controller
             return true;
         }
         return abort(400, 'Ошибка! Вы не можете удалить команду!');
+    }
+
+    public function removeTeammate(RemoveTeammateRequest $request)
+    {
+        $team = $this->teamRepository->getById($request->team_id);
+        try {
+            if($team->user_id === $request->user_id) {
+                TeamUser::query()->where('team_id', $team->id)->delete();
+                $team->update(['user_id' => null]);
+            } else {
+                TeamUser::query()->where('team_id', $team->id)->where('user_id', $request->user_id)->delete();
+            }
+            return ['result' => true];
+        }
+        catch (\Exception $e) {
+            return abort(400, 'Ошибка! Перезагрузите страницу');
+        }
     }
 }

@@ -25,7 +25,8 @@ class RemoveTeammateRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'nullable|integer',
+            'user_id' => 'nullable|integer',
+            'team_id' => 'required|integer',
         ];
     }
 }

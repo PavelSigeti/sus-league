@@ -20,19 +20,31 @@ class AuthController extends Controller
         ]);
         $credentials = $request->only('email', 'password');
 
-        $token = Auth::attempt($credentials);
-        if (!$token) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-            ], 401);
+//        $token = Auth::attempt($credentials);
+//        if (!$token) {
+//            return response()->json([
+//                'status' => 'error',
+//                'message' => 'Unauthorized',
+//            ], 401);
+//        }
+//
+//        $user = Auth::user()->only(['name', 'surname', 'patronymic', 'id', 'role']);
+//        return response()->json([
+//            'status' => 'success',
+//            'user' => $user,
+//        ]);
+
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            $user = auth()->user()->only(['name', 'surname', 'patronymic', 'id', 'role']);
+            return [
+                'status' => 'success',
+                'user' => $user,
+            ];
         }
 
-        $user = Auth::user()->only(['name', 'surname', 'patronymic', 'id', 'role']);
-        return response()->json([
-            'status' => 'success',
-            'user' => $user,
-        ]);
+        return abort(401, ['status' => 'error', 'message' => 'Unauthorized']);
 
     }
 

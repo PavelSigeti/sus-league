@@ -15,16 +15,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::post('login', [\App\Http\Controllers\AuthController::class, 'login']);
+Route::post('login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login');
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/settings', [\App\Http\Controllers\User\DashboardController::class, 'invites']);
     Route::post('/team/store', [\App\Http\Controllers\User\TeamController::class, 'store']);
-    Route::get('/team/edit', [\App\Http\Controllers\User\TeamController::class, 'edit']);
+    Route::get('/team/edit/{id}', [\App\Http\Controllers\User\TeamController::class, 'edit']);
+    Route::get('/team/show', [\App\Http\Controllers\User\TeamController::class, 'show']);
     Route::delete('/team/delete', [\App\Http\Controllers\User\TeamController::class, 'destroy']);
+    Route::post('/team/remove-teammate', [\App\Http\Controllers\User\TeamController::class, 'removeTeammate']);
 
     Route::post('/user/search', [\App\Http\Controllers\User\UserController::class, 'search']);
-    Route::post('/user/remove-teammate', [\App\Http\Controllers\User\UserController::class, 'removeTeammate']);
+    Route::get('/team-invite/show', [\App\Http\Controllers\User\TeamInviteController::class, 'show']);
     Route::post('/team-invite', [\App\Http\Controllers\User\TeamInviteController::class, 'store']);
     Route::delete('/team-invite/{id}/delete', [\App\Http\Controllers\User\TeamInviteController::class, 'destroy']);
     Route::post('/team-invite/{id}/accept', [\App\Http\Controllers\User\TeamInviteController::class, 'accept']);
@@ -98,7 +100,7 @@ Route::group([], function () {
 
     Route::get('/home/stage/ended',[\App\Http\Controllers\Guest\StageController::class, 'getEnded']);
     Route::get('/home/stage/actual',[\App\Http\Controllers\Guest\StageController::class, 'getActual']);
-    
+
     Route::get('/page/{slug}', [\App\Http\Controllers\User\PageController::class, 'show']);
 
     Route::get('/stage/{id}/show', [\App\Http\Controllers\Guest\StageController::class, 'show']);

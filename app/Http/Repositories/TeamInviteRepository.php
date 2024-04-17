@@ -20,14 +20,14 @@ class TeamInviteRepository extends CoreRepository
     public function getByUserId($id)
     {
         $columns = [
-            'name', 'user_id', 'team_invites.id',
+            'name', 'team_invites.user_id', 'team_invites.id',
         ];
 
 
         $result = $this->startConditions()
             ->join('teams', 'team_invites.team_id', '=', 'teams.id')
             ->select($columns)
-            ->where('user_id', $id)
+            ->where('team_invites.user_id', $id)
             ->get();
 
         return $result;

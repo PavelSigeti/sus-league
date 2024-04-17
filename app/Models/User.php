@@ -47,18 +47,19 @@ class User extends Authenticatable
 
     public function races()
     {
-        return $this->belongsToMany(Race::class)->withTimestamps();;
+        return $this->belongsToMany(Race::class)->withTimestamps();
     }
 
-    public function team()
+    public function teams()
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsToMany(Team::class);
     }
 
     public function teamInvites()
     {
         return $this->belongsToMany(TeamInvite::class);
     }
+
 
     public function university()
     {

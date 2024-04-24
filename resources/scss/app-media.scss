@@ -25,9 +25,6 @@
     .dash-stage__container {
         grid-template-columns: 1fr;
     }
-    .user-item__nickname {
-        font-size: 1em;
-    }
     .result-table__item {
         max-width: 900px;
     }
@@ -46,9 +43,6 @@
     .user-settings {
         position: absolute;
         right: 10px;
-    }
-    .user-item__nickname {
-        font-size: .9em;
     }
     .result-table__item {
         max-width: 830px;

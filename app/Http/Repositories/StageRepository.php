@@ -43,7 +43,7 @@ class StageRepository extends CoreRepository
         ];
         $result = $this->startConditions()
             ->select($columns)
-            ->with('users:name,surname,nickname,id')
+            ->with('users:name,surname,id')
             ->find($id);
 
         return $result;
@@ -52,7 +52,7 @@ class StageRepository extends CoreRepository
     public function getByIdWithUsersAdmin($id)
     {
         $result = $this->startConditions()
-            ->with('users:name,surname,nickname,id')
+            ->with('users:name,surname,id')
             ->find($id);
 
         return $result;

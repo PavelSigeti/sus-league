@@ -23,7 +23,7 @@
                             <td>{{idx+1}}</td>
                             <td>
                                 <div class="result-table__name">
-                                    {{user[0].name}} {{user[0].surname}} <span class="result-table__nick">{{user[0].nickname}}</span>
+                                    {{user[0].name}} {{user[0].surname}}
                                 </div>
                             </td>
                             <td v-for="race in user">

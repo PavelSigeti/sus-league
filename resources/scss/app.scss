@@ -320,6 +320,7 @@ h2 {
     color: #222;
 }
 .user-data {
+    font-size: .9em;
     color: #242424;
 }
 .user-settings {
@@ -616,10 +617,6 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-}
-.result-table__nick {
-    color: #555;
-    font-size: .9em;
 }
 .page-link {
     display: flex;
@@ -956,10 +953,6 @@ h1 {
     font-weight: 400;
     font-size: 1.25em;
     color: #555;
-}
-.rating-nickname {
-    font-weight: 500;
-    color: #242424;
 }
 .bars {
     width: 20px;

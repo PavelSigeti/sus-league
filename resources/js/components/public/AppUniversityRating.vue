@@ -5,7 +5,7 @@
         <div class="rating-item" v-for="(item, idx) in data.data" :key="item.user_id">
             <div class="rating-position">#{{idx+1}}</div>
             <div class="rating-title">
-                <div class="rating-name"><div class="rating-nickname">{{item.name}}</div></div>
+                <div class="rating-name">{{item.name}}</div>
 
             </div>
             <div class="rating-score">{{item.total}}</div>

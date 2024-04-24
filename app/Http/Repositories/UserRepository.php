@@ -41,7 +41,7 @@ class UserRepository extends CoreRepository
             })
             ->select('race_user.race_id', 'users.id', 'race_user.place',
                 'races.group_id', 'races.stage_id',
-                'races.status', 'users.name', 'users.surname', 'stage_user.nickname'
+                'races.status', 'users.name', 'users.surname'
             )
             ->where('races.stage_id', $stageId)
             ->where('races.group_id', $groupId)

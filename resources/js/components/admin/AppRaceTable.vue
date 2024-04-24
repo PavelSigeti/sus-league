@@ -12,7 +12,7 @@
         <div class="race-table__body">
             <div class="race-table__column">
                 <div class="race-table__item race-table__name" v-for="user in usersData" :key="user.user_id">
-                    {{user.nickname}}
+                    {{user.id}} {{user.surname}}
                 </div>
             </div>
             <div class="race-table__column" v-for="(race, idx) in raceData" :key="race.race_id">

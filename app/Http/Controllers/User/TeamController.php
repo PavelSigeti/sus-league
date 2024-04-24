@@ -34,8 +34,12 @@ class TeamController extends Controller
     public function edit($id)
     {
         $team = $this->teamRepository->getById($id);
+        $teamInvite = $this->teamInviteRepository->getByTeamId($id);
 
-        return $team->users->map->only(['id', 'name', 'surname', 'patronymic']);
+        return [
+            'users' => $team->users->map->only(['id', 'name', 'surname', 'patronymic']),
+            'invites' => $teamInvite,
+        ];
     }
 
     public function store(TeamStoreRequest $request)
@@ -82,12 +86,15 @@ class TeamController extends Controller
     public function removeTeammate(RemoveTeammateRequest $request)
     {
         $team = $this->teamRepository->getById($request->team_id);
+        $user = Auth::user();
         try {
-            if($team->user_id === $request->user_id) {
-                TeamUser::query()->where('team_id', $team->id)->delete();
-                $team->update(['user_id' => null]);
-            } else {
+            if($team->user_id === $user->id) {
                 TeamUser::query()->where('team_id', $team->id)->where('user_id', $request->user_id)->delete();
+                if($request->user_id === $user->id) {
+                    $team->update(['user_id' => null]);
+                }
+            } else {
+                TeamUser::query()->where('team_id', $team->id)->where('user_id', $user->id)->delete();
             }
             return ['result' => true];
         }

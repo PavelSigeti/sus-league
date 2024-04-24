@@ -11,7 +11,8 @@
         </div>
 
         <div class="content-block">
-            <TeamInvites />
+            <AppTeamInvite @update="getData()" />
+<!--            <TeamInvites />-->
         </div>
 
         <AppCreateTeam
@@ -47,7 +48,6 @@
     </div>
     <div class="dashboard-item" v-if="invites && invites.length > 0">
         <AppTeamInvite
-            :invites="invites"
             @update="getData"
             @load="toggleLoad"
         />
@@ -97,25 +97,6 @@ const getData = async () => {
 onMounted(async() => {
     await getData();
 });
-
-const cancelInvite = async (id, idx) => {
-    loading.value = true;
-    try {
-        await axios.delete(`/api/team-invite/${id}/delete`);
-        teamInvites.value.splice(idx, 1);
-        store.dispatch('notification/displayMessage', {
-            value: 'Приглашение отменено',
-            type: 'primary',
-        });
-    } catch (e) {
-        console.log(e.message);
-        store.dispatch('notification/displayMessage', {
-            value: e.message,
-            type: 'error',
-        });
-    }
-    loading.value = false;
-};
 
 const addInvite = (payload) => {
     teamInvites.value.push(payload);

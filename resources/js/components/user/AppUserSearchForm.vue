@@ -8,7 +8,7 @@
                     id="user"
                     v-model="user"
                     @input="displaySearch = false"
-                    placeholder="Найти пользователя"
+                    placeholder="Добавить (Фамилия\email\id)"
                     autocomplete="off"
                 >
             </div>
@@ -48,7 +48,7 @@ import {useStore} from "vuex";
 
 const store = useStore();
 
-const emit = defineEmits(['invite', 'load']);
+const emit = defineEmits(['invite', 'load', 'update']);
 const props = defineProps(['team_id']);
 
 const user = ref(null);
@@ -58,7 +58,6 @@ const selected = ref(null);
 const displaySearch = ref(false);
 
 const search = async () => {
-    console.log('search');
     if(displaySearch.value === true) {
         user.value = '';
         displaySearch.value = false;
@@ -117,10 +116,14 @@ const invite = async () => {
         });
         emit('load');
     }
+    emit('update');
 };
 </script>
 
 <style scoped>
+.user-item {
+    margin-bottom: 0;
+}
 .user-item__btn {
     width: 40px;
     flex-shrink: 0;

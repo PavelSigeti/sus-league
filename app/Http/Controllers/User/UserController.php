@@ -27,9 +27,9 @@ class UserController extends Controller
         ];
         $result = User::query()
             ->select($select)
-            ->whereNull('team_id')
             ->where(function($query) use ($request) {
                 $query->where('surname', 'LIKE', "%{$request->user}%");
+                $query->orWhere('email', 'LIKE', "%{$request->user}%");
                 $query->orWhere('id', 'LIKE', "%{$request->user}%");
             })
             ->get();

@@ -1,5 +1,5 @@
 <template>
-    <div class="team-invites">
+    <div class="team-invites" v-if="invites.length > 0">
         <h3>Приглашения в команду</h3>
         <div
             class="team-invite__item"
@@ -10,11 +10,11 @@
                 Команда: <span class="b500">{{invite.name}}</span>
             </div>
             <div class="team-invite__buttons">
-                <div class="btn btn-default btn-team btn-accept" @click="acceptInvite(invite.id)">
-                    Принять
+                <div class="btn btn-default btn-team btn-accept" @click="acceptInvite(invite.id)" title="Принять">
+                    <i class="ri-check-line"></i>
                 </div>
-                <div class="btn btn-border btn-team btn-cancel" @click="rejectInvite(invite.id, idx)">
-                    Откзаться
+                <div class="btn btn-border btn-team btn-cancel" @click="rejectInvite(invite.id, idx)" title="Отказаться">
+                    <i class="ri-close-line"></i>
                 </div>
             </div>
         </div>
@@ -22,15 +22,19 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import axios from "axios";
 import {useStore} from "vuex";
 
-
-const invites = ref(props.invites);
+const invites = ref([]);
 const store = useStore();
-const props = defineProps(['invites', 'load']);
+const props = defineProps(['load']);
 const emit = defineEmits(['load', 'update']);
+
+onMounted(async () => {
+    const resp = await axios.get('/api/team-invite/show');
+    invites.value = resp.data.invites;
+});
 
 const rejectInvite = async (id, idx) => {
     emit('load');
@@ -74,5 +78,17 @@ const acceptInvite = async (id) => {
 </script>
 
 <style scoped>
-
+.team-invites {
+    margin-top: 15px;
+    h3 {
+        margin-bottom: 15px;
+    }
+}
+.team-invite__item {
+    box-shadow: 0px 0px 30px 5px rgba(0, 0, 0, 0.1);
+    background: #fff;
+}
+.team-invite__buttons .btn-default {
+    margin-right: 10px;
+}
 </style>

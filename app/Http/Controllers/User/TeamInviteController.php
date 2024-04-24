@@ -36,7 +36,7 @@ class TeamInviteController extends Controller
     public function store(TeamInviteStoreRequest $request)
     {
         $user = Auth::user();
-        $team = $user->team;
+        $team = $this->teamRepository->getById($request->team_id);
 
         $userRequest = User::query()->find($request->user_id);
         $check = TeamInvite::query()->where('user_id', $request->user_id)->where('team_id', $request->team_id)->count();
@@ -45,9 +45,9 @@ class TeamInviteController extends Controller
         }
         $countInvites = $this->teamInviteRepository->countUsersInvites($request->user_id);
         if($countInvites >= 5) {
-            return abort(400, 'Пользователя пригласили уже более пяти команд. Попросите его откланить приглашения');
+            return abort(400, 'Пользователя пригласили уже более пяти команд. Попросите его отклонить приглашения');
         }
-        if($user->id === $team->owner_id && count($team->users) < 3 && $userRequest->team_id === null){
+        if($user->id === $team->user_id && count($team->users) < 4 && count($userRequest->teams) < 3){
             $teamInvite = TeamInvite::query()->create($request->only(['user_id', 'team_id']));
             $response = $userRequest->only(['name', 'surname']);
             $response['user_id'] = $request->user_id;
@@ -55,13 +55,14 @@ class TeamInviteController extends Controller
 
             return $response;
         }
-        return abort(400, 'Ошибка! В команде уже 3 пользователя.');
+        return abort(400, 'Ошибка! В команде уже 4 пользователя');
     }
 
     public function destroy($id) {
         $user = Auth::user();
         $teamInvite = $this->teamInviteRepository->getById($id);
-        if($user->team_id === $teamInvite->team_id || $user->id === $teamInvite->user_id) {
+        $team = $this->teamRepository->getById($teamInvite->team_id);
+        if($user->id === $teamInvite->user_id || $team->user_id === $user->id) {
             $teamInvite->delete();
             return true;
         }
@@ -72,11 +73,11 @@ class TeamInviteController extends Controller
     {
         $user = Auth::user();
         $teamInvite = $this->teamInviteRepository->getById($id);
+        $teamAmount = $this->teamRepository->getTeamsAmount($user['id']);
 
-        if($user->team_id === null && $teamInvite->user_id === $user->id) {
-            $user->update([
-                'team_id' => $teamInvite->team_id,
-            ]);
+        if($teamInvite->user_id === $user->id && $teamAmount < 3) {
+            $team = $this->teamRepository->getById($teamInvite->team_id);
+            $team->users()->attach($user['id']);
             TeamInvite::query()->where('user_id', $user->id)->delete();
 
             return true;

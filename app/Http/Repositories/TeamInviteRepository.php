@@ -20,7 +20,7 @@ class TeamInviteRepository extends CoreRepository
     public function getByUserId($id)
     {
         $columns = [
-            'name', 'team_invites.user_id', 'team_invites.id',
+            'teams.name', 'team_invites.user_id', 'team_invites.id',
         ];
 
 

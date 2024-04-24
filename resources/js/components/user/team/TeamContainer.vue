@@ -10,47 +10,46 @@
                @remove="leaveConfirm=true"
                @modal="modal=false"
         />
-        <div class="teammate-container">
-            <div class="user-item" v-for="user in teammates" :key="user.id">
+    <div class="teammate-container">
+        <div class="user-item" v-for="user in teammates" :key="user.id">
+            <div class="user-item__content">
+                <div class="user-item__name">{{user.surname}} {{user.name}} {{user.patronymic}}</div>
+            </div>
+            <div class="user-item__icon" v-if="team.user_id === user.id">
+                <img src="@/static/crown.svg" alt="crown">
+            </div>
+            <div
+                class="user-item__btn user-item__cancel-btn"
+                v-if="owner && team.user_id !== user.id"
+                @click="kickTeammate = user.id"
+            >
+                <div class="btn btn-border btn-team btn-cancel" title="Исключить"><i class="ri-delete-bin-2-line"></i></div>
+            </div>
+        </div>
+
+        <div class="team-invites" v-if="teamInvites && teamInvites.length > 0">
+            <div
+                class="user-item"
+                v-for="(invite) in teamInvites"
+                :key="invite.id"
+            >
                 <div class="user-item__content">
-                    <div class="user-item__name">{{user.surname}} {{user.name}} {{user.patronymic}}</div>
+                    <div class="user-item__name">
+                        {{invite.surname}} {{invite.name}} {{invite.patronymic}}
+                    </div>
                 </div>
-                <div class="user-item__icon" v-if="team.user_id === user.id">
-                    <img src="@/static/crown.svg" alt="crown">
-                </div>
-                <div
-                    class="user-item__btn user-item__cancel-btn"
-                    v-if="owner && team.user_id !== user.id"
-                    @click="removeTeammate(user.id, props.team.team_id)"
-                >
-                    <div class="btn btn-border btn-team btn-cancel" title="Исключить"><i class="ri-delete-bin-2-line"></i></div>
+                <div class="user-item__btn" @click="cancelInvite(invite.id)">
+                    <div class="btn btn-border btn-team btn-cancel" title="Отменить"><i class="ri-close-line"></i></div>
                 </div>
             </div>
-
-
-
-<!--            <AppUserSearchForm-->
-<!--                v-if="owner && teamInvites && teammates && teamInvites.length < 3 - teammates.length"-->
-<!--                :team_id="team.id"-->
-<!--                @invite="addInvite"-->
-<!--            />-->
-
-<!--        <div class="team-invites" v-if="teamInvites && teamInvites.length > 0">-->
-<!--            <div-->
-<!--                class="user-item"-->
-<!--                v-for="(invite, idx) in teamInvites"-->
-<!--                :key="invite.id"-->
-<!--            >-->
-<!--                <div class="user-item__content">-->
-<!--                    <div class="user-item__name">-->
-<!--                        {{invite.surname}} {{invite.name}} {{invite.patronymic}}-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="user-item__btn" @click="cancelInvite(invite.id, idx)">-->
-<!--                    <div class="btn btn-border btn-team btn-cancel" title="Отменить"><i class="ri-close-large-line"></i></div>-->
-<!--                </div>-->
-<!--            </div>-->
         </div>
+
+        <AppUserSearchForm
+            v-if="owner"
+            :team_id="team.id"
+            @update="emit('update'); teamData();"
+        />
+    </div>
 
     <AppConfirmation v-if="leaveConfirm"
          @confirmation="removeTeammate(props.team.user_id)"
@@ -58,7 +57,13 @@
          :question="owner ? 'Расформировать команду?' : 'Покинуть команду?'"
     />
 
-    </div>
+    <AppConfirmation v-if="kickTeammate !== null"
+         @confirmation="removeTeammate(kickTeammate);kickTeammate = null"
+         @close="kickTeammate = null"
+         question="Исключить из команды?"
+    />
+
+</div>
 </template>
 
 <script setup>
@@ -77,31 +82,34 @@ const teammates = ref([]);
 const open = ref(false);
 const owner = ref(props.team.user_id === store.getters['auth/user'].id ? true : false);
 const leaveConfirm = ref(false);
+const kickTeammate = ref(null);
 const modal = ref(false);
+const teamInvites = ref([]);
+
+const teamData = async () => {
+    const response = await axios.get(`/api/team/edit/${props.team.id}`);
+    teammates.value = await response.data.users;
+    teamInvites.value = await response.data.invites;
+}
 
 onMounted(async ()=>{
-    const response = await axios.get(`/api/team/edit/${props.team.id}`);
-    teammates.value = await response.data;
+    await teamData();
 });
 
 const removeTeammate = async (userId) => {
     emit('loading', true);
-    console.log(userId, props.team.id);
     try {
         const resp = await axios.post(`/api/team/remove-teammate`, {
             'user_id': userId,
             'team_id': props.team.id
         });
-        // if(id === null) {
-        //     await getData();
-        // } else {
-        //     teammates.value.splice(idx, 1);
-        // }
+
         store.dispatch('notification/displayMessage', {
             value: 'Пользователь покинул команду',
             type: 'primary',
         });
         leaveConfirm.value = false;
+        await teamData();
         emit('update');
     } catch (e) {
         console.log(e.message);
@@ -112,7 +120,24 @@ const removeTeammate = async (userId) => {
     }
     emit('loading', false);
 };
-
+const cancelInvite = async (id) => {
+    emit('loading', true);
+    try {
+        await axios.delete(`/api/team-invite/${id}/delete`);
+        store.dispatch('notification/displayMessage', {
+            value: 'Приглашение отменено',
+            type: 'primary',
+        });
+    } catch (e) {
+        console.log(e.message);
+        store.dispatch('notification/displayMessage', {
+            value: e.message,
+            type: 'error',
+        });
+    }
+    await teamData();
+    emit('loading', false);
+};
 </script>
 
 <style scoped lang="scss">
@@ -120,6 +145,10 @@ const removeTeammate = async (userId) => {
     font-size: 1.2em;
     cursor: pointer;
     user-select: none;
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
 }
 .team-head {
     display: flex;
@@ -161,5 +190,8 @@ const removeTeammate = async (userId) => {
     max-height: 300px;
     height: fit-content;
     transition: .5s;
+}
+.team-invites {
+    margin-bottom: 15px;
 }
 </style>

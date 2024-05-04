@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignId('tournament_id')->constrained()->onDelete('cascade');
             $table->dateTime('register_start');
             $table->dateTime('register_end');
-            $table->dateTime('race_start');
             $table->string('title');
             $table->enum('status', ['active', 'default', 'group', 'fleet', 'finished'])->default('active');
             $table->text('excerpt')->nullable();

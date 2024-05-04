@@ -20,7 +20,6 @@ class StageSeeder extends Seeder
             'tournament_id' => 1,
             'register_start' => Carbon::now(),
             'register_end' => Carbon::tomorrow(),
-            'race_start' => Carbon::tomorrow(),
             'title' => '1 этап J70',
         ]);
 
@@ -28,7 +27,6 @@ class StageSeeder extends Seeder
             'tournament_id' => 2,
             'register_start' => Carbon::now(),
             'register_end' => Carbon::tomorrow(),
-            'race_start' => Carbon::tomorrow(),
             'title' => '1 этап J70',
         ]);
     }

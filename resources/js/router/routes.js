@@ -98,6 +98,33 @@ export default [
         }
     },
     {
+        path: '/admin/docs',
+        name: 'admin.docs',
+        component: () => import('../views/admin/Docs.vue'),
+        meta: {
+            layout: 'Admin',
+            auth: true,
+        }
+    },
+    {
+        path: '/admin/docs-confirm',
+        name: 'admin.docs-confirm',
+        component: () => import('../views/admin/DocsConfirm.vue'),
+        meta: {
+            layout: 'Admin',
+            auth: true,
+        }
+    },
+    {
+        path: '/admin/docs-cancel',
+        name: 'admin.docs-cancel',
+        component: () => import('../views/admin/DocsCancel.vue'),
+        meta: {
+            layout: 'Admin',
+            auth: true,
+        }
+    },
+    {
         path: '/admin/pages',
         name: 'admin.pages',
         component: () => import('../views/admin/page/index.vue'),

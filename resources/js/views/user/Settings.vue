@@ -3,7 +3,7 @@
     <main>
         <div class="container-fluid g-0">
             <div class="row">
-                <div class="col-12 col-lg-8 col-xl-6">
+                <div class="col-12">
                     <div class="dashboard-item">
                         <AppLoader v-if="loading" />
                         <h3>Данные пользователя</h3>
@@ -27,6 +27,8 @@
                             <button class="btn btn-default btn-full-width">Сохранить</button>
                         </form>
                     </div>
+
+                    <UserFiles />
                 </div>
             </div>
         </div>
@@ -43,10 +45,12 @@ import 'vue-select/dist/vue-select.css';
 import AppLoader from "@/components/ui/AppLoader.vue";
 import AppHeader from "@/components/ui/AppHeader.vue";
 import axios from "axios";
+import UserFiles from "@/components/user/UserFiles.vue";
 
 export default {
     name: "Settings",
     components: {
+        UserFiles,
         AppHeader, AppLoader, vSelect,
         Field, ErrorMessage,
     },
@@ -103,5 +107,9 @@ export default {
 </script>
 
 <style scoped>
-
+.user-account__data {
+    p:last-child {
+        margin-bottom: 0;
+    }
+}
 </style>

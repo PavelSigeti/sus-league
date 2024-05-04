@@ -10,12 +10,11 @@
         <div class="user-stage__date">
             <span>Начало регистрации: {{time(stage.register_start)}}</span>
             <span>Окончание регистрации: {{time(stage.register_end)}}</span>
-            <span>Начало гонок: {{time(stage.race_start)}}</span>
         </div>
         <div class="user-stage__info" v-if="time(stage.register_start) > now">
             Регистрация не началась
         </div>
-        <div class="user-stage__info" v-else-if="time(stage.race_start) < now && stage.status !== 'finished'">
+        <div class="user-stage__info" v-else-if="stage.status !== 'finished'">
             Регата проходит
         </div>
         <div v-else-if="stage.status === 'active' && time(stage.register_end) > now"

@@ -15,7 +15,7 @@ class StageRepository extends CoreRepository
     public function getByTournamentId($id)
     {
         $columns = [
-            'race_start', 'id', 'title',
+            'id', 'title',
         ];
         $result = $this->startConditions()
             ->select($columns)
@@ -38,7 +38,7 @@ class StageRepository extends CoreRepository
     {
         $columns = [
             'status','title', 'register_start',
-            'register_end', 'race_start', 'description',
+            'register_end', 'description',
             'id',
         ];
         $result = $this->startConditions()
@@ -83,7 +83,7 @@ class StageRepository extends CoreRepository
     {
         $columns = [
             'stages.id', 'register_start', 'register_end',
-            'race_start', 'stages.title', 'tournaments.title as tournament',
+            'stages.title', 'tournaments.title as tournament',
             'excerpt', 'status',
         ];
 
@@ -94,7 +94,6 @@ class StageRepository extends CoreRepository
                 $query->where('user_id', $id);
             }])
             ->where('status', '!=', 'finished')
-            ->orderBy('race_start')
             ->get();
 
         return $result;
@@ -103,7 +102,7 @@ class StageRepository extends CoreRepository
     {
         $columns = [
             'stages.id', 'register_start', 'register_end',
-            'race_start', 'stages.title', 'tournaments.title as tournament',
+            'stages.title', 'tournaments.title as tournament',
             'status',
         ];
 
@@ -114,7 +113,6 @@ class StageRepository extends CoreRepository
                 $query->where('user_id', $id);
             }])
             ->where('status', '!=', 'finished')
-            ->orderBy('race_start')
             ->limit(2)
             ->get();
 
@@ -125,7 +123,7 @@ class StageRepository extends CoreRepository
     {
         $columns = [
             'stages.id', 'register_start', 'register_end',
-            'race_start', 'stages.title', 'tournaments.title as tournament',
+            'stages.title', 'tournaments.title as tournament',
             'excerpt', 'status',
         ];
 
@@ -136,7 +134,6 @@ class StageRepository extends CoreRepository
                 $query->where('user_id', $id);
             }])
             ->where('status', 'finished')
-            ->orderBy('race_start')
             ->get();
 
         return $result;
@@ -146,7 +143,7 @@ class StageRepository extends CoreRepository
     {
         $columns = [
             'stages.id', 'register_start', 'register_end',
-            'race_start', 'stages.title', 'tournaments.title as tournament',
+            'stages.title', 'tournaments.title as tournament',
             'excerpt', 'status',
         ];
 
@@ -154,7 +151,6 @@ class StageRepository extends CoreRepository
             ->select($columns)
             ->join('tournaments', 'stages.tournament_id', '=', 'tournaments.id')
             ->where('status', 'finished')
-            ->orderBy('race_start')
             ->get();
 
         return $result;
@@ -164,7 +160,7 @@ class StageRepository extends CoreRepository
     {
         $columns = [
             'stages.id', 'register_start', 'register_end',
-            'race_start', 'stages.title', 'tournaments.title as tournament',
+            'stages.title', 'tournaments.title as tournament',
             'excerpt', 'status',
         ];
 
@@ -172,7 +168,6 @@ class StageRepository extends CoreRepository
             ->select($columns)
             ->join('tournaments', 'stages.tournament_id', '=', 'tournaments.id')
             ->where('status', '!=', 'finished')
-            ->orderBy('race_start')
             ->get();
 
         return $result;
@@ -183,7 +178,7 @@ class StageRepository extends CoreRepository
     {
         $columns = [
             'stages.id', 'register_start', 'register_end',
-            'race_start', 'stages.title', 'tournaments.title as tournament',
+            'stages.title', 'tournaments.title as tournament',
             'excerpt', 'status', 'stage_user.stage_id',
         ];
 
@@ -192,7 +187,6 @@ class StageRepository extends CoreRepository
             ->join('tournaments', 'stages.tournament_id', '=', 'tournaments.id')
             ->join('stage_user', 'stages.id', 'stage_user.stage_id')
             ->where('user_id', $id)
-            ->orderBy('race_start', 'desc')
             ->get()
             ->map(function ($item) {
                 $item['users_exists'] = true;

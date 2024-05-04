@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('surname', 32);
             $table->string('patronymic', 32);
             $table->string('email')->unique();
-//            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->integer('university_id')->nullable();
             $table->date('birth');

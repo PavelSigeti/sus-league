@@ -30,7 +30,7 @@ class StageController extends Controller
     public function store(StageStoreRequest $request) {
         $stage = Stage::query()->create($request->only([
             'tournament_id', 'register_start', 'register_end',
-            'race_start', 'title', 'excerpt',
+            'title', 'excerpt',
             'description',
         ]));
 
@@ -118,7 +118,7 @@ class StageController extends Controller
         $stage = $this->stageRepository->getById($id);
 
         $stage->update($request->only([
-            'register_start', 'register_end', 'race_start',
+            'register_start', 'register_end',
             'title', 'excerpt', 'description',
             'race_amount_drop', 'race_amount_group_drop', 'race_amount_fleet_drop',
             'participant_text',

@@ -732,7 +732,7 @@ h1 {
 .dash-stage__container {
     display: grid;
     grid-gap: 30px;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
 }
 .dash-stage__header {
     display: flex;
@@ -1147,6 +1147,61 @@ body .vue3-progress-bar-container .vue3-progress-bar {
     font-size: 1.5em;
     user-select: none;
 }
+.file-table {
+    display: grid;
+    grid-gap: 10px;
+}
+.file-table__head {
+    font-size: 1.2em;
+    font-weight: 500;
+}
+.file-item {
+    width: 950px;
+    display: grid;
+    grid-template-columns: 50px 150px 250px 150px 150px 50px;
+    grid-gap: 10px;
+    div {
+        display: flex;
+    }
+    a {
+        font-size: 2em;
+        display: flex;
+        width: 150px;
+        height: 70px;
+        justify-content: center;
+        align-items: center;
+        background: #ddf7ff;
+        color: #242424;
+    }
+}
+.file-item__2 {
+    border-radius: 10px;
+    overflow: hidden;
+    img {
+        width: 150px;
+        height: 70px;
+        object-fit: cover;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        box-sizing: border-box;
+    }
+}
+.file-user {
+    display: flex;
+    flex-direction: column;
+    height: 70px;
+    justify-content: center;
+    font-size: 1.1em;
+    font-weight: 500;
+}
+.file-id {
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+
+
 .b500 {
     font-weight: 500;
 }

@@ -39,9 +39,6 @@
                         <div class="stage-yacht">
                             {{yacht}}
                         </div>
-                        <div class="stage-time">
-                            {{time(stage.race_start)}}
-                        </div>
                         <div class="btn btn-default btn-full-width">Подробнее</div>
                     </router-link>
                 </div>
@@ -84,7 +81,6 @@ export default {
         const addStage = (submitData) => {
             stages.value.unshift({
                 id: submitData.id,
-                race_start: submitData.race_start,
                 title: submitData.title,
             });
         }

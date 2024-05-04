@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class StageStoreRequest extends FormRequest
+class UserFileUploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +14,7 @@ class StageStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return Auth::check() && Auth::user()->role === 'admin';
+        return Auth::check();
     }
 
     /**
@@ -25,12 +25,8 @@ class StageStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'tournament_id' => 'required|integer',
-            'register_start' => 'required|date',
-            'register_end' => 'required|date',
-            'title' => 'required|string',
-            'excerpt' => 'nullable|string',
-            'description' => 'nullable|string',
+            'file' => 'required|mimes:jpeg,jpg,png,pdf,webp|max:4096',
+            'type' => 'required|string',
         ];
     }
 }

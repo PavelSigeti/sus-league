@@ -11,10 +11,6 @@
             <input class="form-input" type="datetime-local" id="register_end" v-model="register_end">
         </div>
         <div class="form-control">
-            <label for="race_start">Начало гонок</label>
-            <input class="form-input" type="datetime-local" id="race_start" v-model="race_start">
-        </div>
-        <div class="form-control">
             <label for="title">Название</label>
             <input class="form-input" type="text" id="title" v-model="title" placeholder="Название">
         </div>
@@ -53,7 +49,6 @@ export default {
 
         const register_start = ref('');
         const register_end = ref('');
-        const race_start = ref('');
         const title = ref('');
         const excerpt = ref('');
         const description = ref('');
@@ -68,7 +63,6 @@ export default {
                     tournament_id: id,
                     register_start: register_start.value,
                     register_end: register_end.value,
-                    race_start: race_start.value,
                     title: title.value,
                     excerpt: excerpt.value,
                     description: description.value,
@@ -78,7 +72,7 @@ export default {
                     value: 'Этап успешно создана',
                     type: 'primary',
                 });
-                register_start.value = register_end.value = race_start.value = title.value = '';
+                register_start.value = register_end.value = title.value = '';
                 excerptInput.value.clear();
                 descriptionInput.value.clear();
                 loading.value = false;
@@ -92,7 +86,7 @@ export default {
         };
 
         return {
-            register_start, register_end, race_start,
+            register_start, register_end,
             title, excerpt, description,
             submit, loading, excerptInput,
             descriptionInput,

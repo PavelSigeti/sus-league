@@ -9,12 +9,11 @@
         <div class="dash-stage__date">
             <span>Начало регистрации: {{time(stage.register_start)}}</span>
             <span>Окончание регистрации: {{time(stage.register_end)}}</span>
-            <span>Начало гонок: {{time(stage.race_start)}}</span>
         </div>
         <div class="btn btn-disable btn-settings-280" v-if="time(stage.register_start) > now">
             Регистрация не началась
         </div>
-        <div class="btn btn-disable btn-settings-280" v-else-if="time(stage.race_start) < now && stage.status !== 'finished'">
+        <div class="btn btn-disable btn-settings-280" v-else-if="stage.status !== 'finished'">
             Регата проходит
         </div>
         <div

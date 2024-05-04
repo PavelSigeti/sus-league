@@ -44,6 +44,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/feedback', [\App\Http\Controllers\User\FeedbackController::class, 'store']);
 
     Route::get('/stage/{id}/show-users', [\App\Http\Controllers\User\StageController::class, 'showForUsers']);
+
+    Route::post('/user/file', [\App\Http\Controllers\User\UserFileController::class, 'upload']);
+    Route::get('/user/docs', [\App\Http\Controllers\User\UserFileController::class, 'docs']);
+    Route::delete('/user/file/{type}', [\App\Http\Controllers\User\UserFileController::class, 'destroy']);
+
+    Route::get('/stage/{id}/files', [\App\Http\Controllers\Admin\StageFileController::class, 'getStageFiles']);
 });
 
 Route::group(['middleware' => ['auth:sanctum',  'admin' ]], function () {
@@ -71,10 +77,8 @@ Route::group(['middleware' => ['auth:sanctum',  'admin' ]], function () {
     Route::get('/admin/race/{id}', [\App\Http\Controllers\Admin\RaceController::class, 'getRacePlace']);
     Route::get('/admin/race/{id}/users', [\App\Http\Controllers\Admin\RaceController::class, 'getRaceUsers']);
 
-
     Route::post('/admin/race/create', [\App\Http\Controllers\Admin\RaceController::class, 'createRace']);
     Route::post('/admin/race/{id}/remove', [\App\Http\Controllers\Admin\RaceController::class, 'destroy']);
-
 
     Route::get('/admin/stage/{stageId}/{groupId}/{status}/total', [\App\Http\Controllers\Admin\StageController::class, 'getTotal']);
     Route::get('/admin/stage/{stageId}/{groupId}/{status}/total-detail', [\App\Http\Controllers\Admin\StageController::class, 'getTotalDetail']);
@@ -87,6 +91,15 @@ Route::group(['middleware' => ['auth:sanctum',  'admin' ]], function () {
     Route::post('/admin/page/store', [\App\Http\Controllers\Admin\PageController::class, 'store']);
     Route::get('/admin/page/{id}', [\App\Http\Controllers\Admin\PageController::class, 'edit']);
     Route::patch('/admin/page/{id}/update', [\App\Http\Controllers\Admin\PageController::class, 'update']);
+
+    Route::get('/admin/docs/{status}', [\App\Http\Controllers\Admin\FileController::class, 'show']);
+    Route::post('/admin/docs/{id}/approve', [\App\Http\Controllers\Admin\FileController::class, 'approve']);
+    Route::post('/admin/docs/{id}/cancel', [\App\Http\Controllers\Admin\FileController::class, 'cancel']);
+    Route::delete('/admin/docs/{id}/delete', [\App\Http\Controllers\Admin\FileController::class, 'destroy']);
+
+    Route::get('/admin/stage/{id}/files', [\App\Http\Controllers\Admin\StageFileController::class, 'getStageFiles']);
+    Route::post('/admin/stage/file', [\App\Http\Controllers\Admin\StageFileController::class, 'store']);
+    Route::delete('/admin/stage/file/{id}/delete', [\App\Http\Controllers\Admin\StageFileController::class, 'destroy']);
 });
 
 

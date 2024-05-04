@@ -9,7 +9,6 @@
                         <div class="user-stage__date mb0" >
                             <span>Начало регистрации: {{time(stage.register_start)}}</span>
                             <span>Окончание регистрации: {{time(stage.register_end)}}</span>
-                            <span>Начало гонок: {{time(stage.race_start)}}</span>
                         </div>
                     </div>
                     <div class="dashboard-item" v-if="stage && stage.description">

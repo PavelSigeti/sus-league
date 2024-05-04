@@ -12,7 +12,7 @@ class Stage extends Model
 
     protected $fillable = [
         'tournament_id', 'register_start', 'register_end',
-        'race_start', 'title', 'excerpt',
+        'title', 'excerpt',
         'description', 'status', 'race_amount_drop',
         'race_amount_group_drop', 'race_amount_fleet_drop', 'participant_text',
     ];

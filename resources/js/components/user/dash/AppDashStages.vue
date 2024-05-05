@@ -13,9 +13,9 @@
         <div class="btn btn-disable btn-settings-280" v-if="time(stage.register_start) > now">
             Регистрация не началась
         </div>
-        <div class="btn btn-disable btn-settings-280" v-else-if="stage.status !== 'finished'">
-            Регата проходит
-        </div>
+<!--        <div class="btn btn-disable btn-settings-280" v-else-if="stage.status !== 'finished'">-->
+<!--            Регата проходит-->
+<!--        </div>-->
         <div
             v-else-if="stage.status === 'active' && time(stage.register_end) > now"
              :class="['btn', 'btn-settings-280', {'btn-default': !stage.users_exists}, {'btn-border': stage.users_exists}]"

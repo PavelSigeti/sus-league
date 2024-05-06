@@ -4,16 +4,20 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\StageRepository;
+use App\Http\Repositories\TeamRepository;
+use App\Http\Requests\AcceptTeamRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class StageController extends Controller
 {
     protected $stageRepository;
+    protected $teamRepository;
 
     public function __construct()
     {
         $this->stageRepository = app(StageRepository::class);
+        $this->teamRepository = app(TeamRepository::class);
     }
 
     public function actual()
@@ -42,20 +46,36 @@ class StageController extends Controller
         return $this->stageRepository->getEnded($user->id);
     }
 
-    public function accept($id)
+    public function accept(AcceptTeamRequest $request)
     {
-        $stage = $this->stageRepository->getById($id);
-        $now = Carbon::now()->format('Y-m-d\TH:i');
         $user = Auth::user();
 
-        if($user->stages->where('id', $id)->count() !== 0) {
-            return abort('400', 'Ошибка, обновите страницу');
+        $stage = $this->stageRepository->getById($request->stage_id);
+        $team = $this->teamRepository->getById($request->team_id);
+
+        if($team->user_id === $user['id']) {
+            return response()->json([
+                'result' => false,
+                'msg' => 'Ошибка'
+            ], 400);
         }
-        if($stage->status === 'active' &&
-            $stage->register_end > $now
-            && $stage->register_start <= $now)
+
+        if(count($team->users) !== 4) {
+            return response()->json([
+                'result' => false,
+                'msg' => 'В команде не 4 человека',
+            ], 400);
+        }
+
+        $users = $team->users;
+
+        if($stage->status === 'active')
         {
-            $user->stages()->attach($id, ['team_id' => $user->team_id, 'nickname' => $user->nickname]);
+            foreach ($users as $user) {
+                $user->stages()->attach($request->stage_id, ['team_id' => $request->team_id]);
+            }
+
+            return ['result' => true];
         } else {
             return abort('400', 'Ошибка, на регату не зарегестрироваться');
         }

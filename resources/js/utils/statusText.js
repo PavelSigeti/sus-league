@@ -4,7 +4,7 @@ export default (status) => {
             return 'На модерации';
 
         case 'approve':
-            return 'Докумнт подтвержден';
+            return 'Документ подтвержден';
 
         case 'cancel':
             return 'Не прошел модерацию';

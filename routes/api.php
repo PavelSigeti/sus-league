@@ -25,6 +25,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::delete('/team/delete', [\App\Http\Controllers\User\TeamController::class, 'destroy']);
     Route::post('/team/remove-teammate', [\App\Http\Controllers\User\TeamController::class, 'removeTeammate']);
 
+    Route::get('/team/capitan', [\App\Http\Controllers\User\TeamController::class, 'capitanTeams']);
+
     Route::post('/user/search', [\App\Http\Controllers\User\UserController::class, 'search']);
     Route::get('/team-invite/show', [\App\Http\Controllers\User\TeamInviteController::class, 'show']);
     Route::post('/team-invite', [\App\Http\Controllers\User\TeamInviteController::class, 'store']);
@@ -38,7 +40,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/stage/actual/dashboard', [\App\Http\Controllers\User\StageController::class, 'actualDashboard']);
     Route::get('/stage/registered-stage', [\App\Http\Controllers\User\StageController::class, 'registeredStage']);
     Route::get('/stage/ended', [\App\Http\Controllers\User\StageController::class, 'ended']);
-    Route::post('/stage/{id}/accept', [\App\Http\Controllers\User\StageController::class, 'accept']);
+    Route::post('/stage/accept', [\App\Http\Controllers\User\StageController::class, 'accept']);
     Route::post('/stage/{id}/cancel', [\App\Http\Controllers\User\StageController::class, 'cancel']);
 
     Route::post('/feedback', [\App\Http\Controllers\User\FeedbackController::class, 'store']);

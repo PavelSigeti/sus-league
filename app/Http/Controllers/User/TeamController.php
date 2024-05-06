@@ -53,8 +53,6 @@ class TeamController extends Controller
             'user_id' => $user['id'],
         ];
 
-//        dd($data);
-
         $team = Team::query()->create($data);
         $team->users()->sync($user['id']);
         $teamAmount++;
@@ -101,5 +99,19 @@ class TeamController extends Controller
         catch (\Exception $e) {
             return abort(400, 'Ошибка! Перезагрузите страницу');
         }
+    }
+
+    public function capitanTeams()
+    {
+        $user = Auth::user();
+
+        $teams = Team::query()->where('user_id', $user['id'])->whereHas('users', function ($query) {
+            $query->havingRaw('COUNT(*) = 4');
+        }, '=', 4)->with('users')->get();
+
+        return [
+            'result' => true,
+            'teams' => $teams,
+        ];
     }
 }

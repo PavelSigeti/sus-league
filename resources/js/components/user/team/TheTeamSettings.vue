@@ -12,7 +12,6 @@
 
         <div class="content-block">
             <AppTeamInvite @update="getData()" />
-<!--            <TeamInvites />-->
         </div>
 
         <AppCreateTeam
@@ -21,30 +20,6 @@
             @loadData="getData()"
         />
 
-<!--        <AppUserSearchForm-->
-<!--            v-if="owner && teamInvites && teammates && teamInvites.length < 3 - teammates.length"-->
-<!--            :team_id="team.id"-->
-<!--            @invite="addInvite"-->
-<!--            @load="toggleLoad"-->
-<!--        />-->
-<!--        <button class="btn btn-border btn-full-width" v-if="owner" @click="leaveConfirm = true">Расформировать команду</button>-->
-<!--        <AppConfirmation v-if="owner && leaveConfirm"-->
-<!--                         @confirmation="deleteTeam"-->
-<!--                         @close="leaveConfirm = false"-->
-<!--                         question="Расформировать команду?"-->
-<!--        />-->
-<!--        <button-->
-<!--            v-if="!owner && team"-->
-<!--            class="btn btn-border btn-full-width"-->
-<!--            @click="leaveConfirm = true"-->
-<!--        >-->
-<!--            Покинуть команду-->
-<!--        </button>-->
-<!--        <AppConfirmation v-if="!owner && leaveConfirm"-->
-<!--                         @confirmation="removeTeammate(null, null)"-->
-<!--                         @close="leaveConfirm = false"-->
-<!--                         question="Покинуть команду?"-->
-<!--        />-->
     </div>
     <div class="dashboard-item" v-if="invites && invites.length > 0">
         <AppTeamInvite
@@ -68,12 +43,7 @@ import TeamContainer from "@/components/user/team/TeamContainer.vue";
 const store = useStore();
 
 const teams = ref([]);
-// const invites = ref();
-// const owner = ref(false);
-// const teammates = ref([]);
-// const teamInvites = ref();
 const loading = ref(false);
-// const leaveConfirm = ref(false);
 
 const toggleLoad = () => {
     loading.value = !loading.value;
@@ -84,10 +54,6 @@ const getData = async () => {
     try {
         const response = await axios.get('/api/team/show');
         teams.value = response.data;
-        // invites.value = response.data.invites;
-        // owner.value = response.data.owner;
-        // teammates.value = response.data.teammates;
-        // teamInvites.value = response.data.teamInvites;
     } catch (e) {
         console.log(e.message);
     }

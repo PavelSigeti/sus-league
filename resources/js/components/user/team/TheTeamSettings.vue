@@ -67,26 +67,6 @@ onMounted(async() => {
 const addInvite = (payload) => {
     teamInvites.value.push(payload);
 };
-
-const deleteTeam = async () => {
-    loading.value = true;
-    try {
-      await axios.delete(`/api/team/delete`);
-      store.dispatch('notification/displayMessage', {
-          value: 'Команда расформирована!',
-          type: 'primary',
-      });
-      await getData();
-    }  catch (e) {
-      console.log(e.message);
-      store.dispatch('notification/displayMessage', {
-          value: e.response.data.message,
-          type: 'error',
-      });
-    }
-    leaveConfirm.value = false;
-    loading.value = false;
-};
 </script>
 
 <style scoped>

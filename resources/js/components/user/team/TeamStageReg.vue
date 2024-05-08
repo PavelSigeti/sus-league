@@ -1,5 +1,5 @@
 <template>
-<div class="team-list" v-if="teams.length > 0 && !props.status">
+<div class="team-list" v-if="teams.length > 0 && !status">
     <div class="team-list__header">Выберите команду</div>
     <div
         :class="['team-list__item', {'team-list__item-select': team.id===select} ]"
@@ -9,25 +9,83 @@
     >
         {{team.name}}
     </div>
-    <div class="btn btn-default" v-if="select !== null">Зарегистрировать</div>
+    <div class="btn btn-default" v-if="select !== null" @click="reg">Зарегистрировать</div>
 </div>
-<div class="team-notification" v-if="teams.length === 0 && !props.status">
+<div class="team-notification" v-if="teams.length === 0 && !status">
     Вы не состоите в команде или не являетесь капитаном
 </div>
-<div class="btn btn-disable btn-settings-280" v-if="props.status">Одна из ваших команд зарегестирована</div>
+<div class="btn btn-disable btn-settings-280" v-if="status && teamReg">Команда "{{teamReg.name}}" зарегистрирована</div>
+<div class="btn btn-default" v-if="status && teamReg.user_id === user.id" @click="cancel">Отказаться</div>
 </template>
 
 <script setup>
 import {onMounted, ref} from "vue";
+import {useStore} from "vuex";
 
-const props = defineProps(['status']);
+const store = useStore();
+const user = store.getters['auth/user'];
+const props = defineProps(['status', 'stage']);
+const emit = defineEmits(['reg', 'cancel']);
+const status = ref(props.status);
 const teams = ref([]);
 const select = ref(null);
+const teamReg = ref({});
 
 onMounted(async () => {
    const response = await axios.get('/api/team/capitan');
    teams.value = response.data.teams;
+
+   if(props.status) {
+       const teamResp = await axios.get(`/api/stage/${props.stage}/reg-info`);
+       teamReg.value = teamResp.data.team;
+   }
 });
+
+const reg = async () => {
+    try {
+        const ans = await axios.post(`/api/stage/accept`, {
+            stage_id: props.stage,
+            team_id: select.value,
+        });
+
+        if(ans.data.result) {
+            emit('reg');
+            teamReg.value = ans.data.team;
+            status.value = true;
+            store.dispatch('notification/displayMessage', {
+                value: 'Команда зарегистрирована',
+                type: 'primary',
+            });
+        }
+    } catch (e) {
+        console.log(e.message);
+        store.dispatch('notification/displayMessage', {
+            value: e.message,
+            type: 'error',
+        });
+    }
+};
+
+const cancel = async () => {
+    try {
+        const ans = await axios.post('/api/stage/cancel', {
+            stage_id: props.stage,
+            team_id: teamReg.value.id,
+        });
+        if(ans.data.result) {
+            emit('cancel');
+            select.value = null;
+            teamReg.value = {};
+            status.value = false;
+            store.dispatch('notification/displayMessage', {
+                value: 'Регистрация отменена',
+                type: 'primary',
+            });
+        }
+    } catch (e) {
+        console.log(e.message);
+    }
+};
 
 </script>
 
@@ -71,7 +129,7 @@ onMounted(async () => {
     height: 36px;
 }
 .team-notification {
-    background: #bde8ff;
+    background: #ddd;
     width: fit-content;
     padding: 5px 10px;
     border-radius: 5px;

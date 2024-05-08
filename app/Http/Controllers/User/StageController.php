@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Repositories\StageRepository;
 use App\Http\Repositories\TeamRepository;
 use App\Http\Requests\AcceptTeamRequest;
+use App\Models\StageUser;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -53,10 +54,10 @@ class StageController extends Controller
         $stage = $this->stageRepository->getById($request->stage_id);
         $team = $this->teamRepository->getById($request->team_id);
 
-        if($team->user_id === $user['id']) {
+        if($team->user_id !== $user['id']) {
             return response()->json([
                 'result' => false,
-                'msg' => 'Ошибка'
+                'msg' => 'Ошибка вы не капитан команды'
             ], 400);
         }
 
@@ -75,28 +76,37 @@ class StageController extends Controller
                 $user->stages()->attach($request->stage_id, ['team_id' => $request->team_id]);
             }
 
-            return ['result' => true];
+            return ['result' => true, 'team' => $team];
         } else {
             return abort('400', 'Ошибка, на регату не зарегестрироваться');
         }
     }
 
-    public function cancel($id)
+    public function cancel(AcceptTeamRequest $request)
     {
-        $stage = $this->stageRepository->getById($id);
-        $now = Carbon::now()->format('Y-m-d\TH:i');
+        $team = $this->teamRepository->getById($request->team_id);
         $user = Auth::user();
 
-        if($user->stages->where('id', $id)->count() === 0) {
-            return abort('400', 'Ошибка, обновите страницу');
+        if($team->user_id !== $user['id']) {
+            return response()->json([
+                'result' => false,
+                'msg' => 'Ошибка, вы не капитан команды'
+            ], 400);
         }
 
-        if( $stage->status === 'active' &&
-            $stage->register_end > $now
-            && $stage->register_start <= $now)
-        {
-            $user->stages()->detach($id);
+        $stage = $this->stageRepository->getById($request->stage_id);
+        $users = $team->users;
 
+        $stageUsers = StageUser::query()
+            ->where('stage_id', $request->stage_id)
+            ->where('user_id', $request->user_id)->get();
+
+        if( $stage->status === 'active')
+        {
+            foreach ($users as $user) {
+                $user->stages()->detach($request->stage_id);
+            }
+            return ['result' => true];
         } else {
             return abort('400', 'Ошибка, гонка уже началась');
         }
@@ -112,6 +122,21 @@ class StageController extends Controller
         }
 
         return $this->stageRepository->getByIdWithUsers($id);
+    }
+
+    public function regInfo($id)
+    {
+        $user = Auth::user();
+
+        $stage = StageUser::query()->where('user_id', $user['id'])->where('stage_id', $id)->first();
+
+        $team = $this->teamRepository->getById($stage->team_id);
+
+        return [
+            'result' => true,
+            'team' => $team,
+        ];
+
     }
 
 }

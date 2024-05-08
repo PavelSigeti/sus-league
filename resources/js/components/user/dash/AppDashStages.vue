@@ -14,9 +14,15 @@
             Регистрация не началась
         </div>
 
-        <TeamStageReg :status="stage.users_exists" v-if="teamReg" />
+        <TeamStageReg
+            :stage="stage.id"
+            :status="stage.users_exists"
+            v-if="teamReg || stage.users_exists"
+            @reg="stage.users_exists = true"
+            @cancel="teamReg=false; stage.users_exists = false"
+        />
         <div
-            v-if="stage.status === 'active' && time(stage.register_end) > now && !teamReg"
+            v-if="stage.status === 'active' && time(stage.register_end) > now && !teamReg && !stage.users_exists"
             :class="['btn', 'btn-settings-280', 'btn-default']"
             @click="teamReg=true"
         >Принять участие</div>

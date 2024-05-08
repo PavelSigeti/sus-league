@@ -7,6 +7,7 @@ use App\Http\Repositories\TeamInviteRepository;
 use App\Http\Repositories\TeamRepository;
 use App\Http\Requests\RemoveTeammateRequest;
 use App\Http\Requests\TeamStoreRequest;
+use App\Models\StageUser;
 use App\Models\Team;
 use App\Models\TeamInvite;
 use App\Models\TeamUser;
@@ -85,6 +86,18 @@ class TeamController extends Controller
     {
         $team = $this->teamRepository->getById($request->team_id);
         $user = Auth::user();
+
+        $activeStage = StageUser::query()
+            ->where('stage_user.user_id', $user['id'])
+            ->where('stage_user.team_id', $team->id)
+            ->join('stages', 'stage_user.stage_id', '=', 'stages.id')
+            ->whereNot('stages.status', 'finished')
+            ->count();
+
+        if($activeStage !== 0) {
+            return abort(400, 'Команда зарегистрирована на регату!');
+        }
+
         try {
             if($team->user_id === $user->id) {
                 TeamUser::query()->where('team_id', $team->id)->where('user_id', $request->user_id)->delete();

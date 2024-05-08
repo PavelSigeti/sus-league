@@ -45,7 +45,7 @@
         </div>
 
         <AppUserSearchForm
-            v-if="owner"
+            v-if="owner && teammates.length < 4"
             :team_id="team.id"
             @update="emit('update'); teamData();"
         />
@@ -99,7 +99,7 @@ onMounted(async ()=>{
 const removeTeammate = async (userId) => {
     emit('loading', true);
     try {
-        const resp = await axios.post(`/api/team/remove-teammate`, {
+        await axios.post(`/api/team/remove-teammate`, {
             'user_id': userId,
             'team_id': props.team.id
         });

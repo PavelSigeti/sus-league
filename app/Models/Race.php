@@ -13,9 +13,9 @@ class Race extends Model
         'stage_id', 'group_id', 'status',
     ];
 
-    public function users()
+    public function teams()
     {
-        return $this->belongsToMany(User::class)->withTimestamps();
+        return $this->belongsToMany(Team::class)->withTimestamps();
     }
 
     public function stages()

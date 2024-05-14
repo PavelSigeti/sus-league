@@ -54,6 +54,15 @@ class StageController extends Controller
         $stage = $this->stageRepository->getById($request->stage_id);
         $team = $this->teamRepository->getById($request->team_id);
 
+        $teamUsers = $team->users->pluck('id');
+
+        if(StageUser::query()->whereIn('user_id', $teamUsers)->where('stage_id', $request->stage_id)->exists()) {
+            return response()->json([
+                'result' => false,
+                'msg' => 'Один из ваших членов команды уже зарегистрированы на регату в другой команде'
+            ]);
+        }
+
         if($team->user_id !== $user['id']) {
             return response()->json([
                 'result' => false,
@@ -96,10 +105,6 @@ class StageController extends Controller
 
         $stage = $this->stageRepository->getById($request->stage_id);
         $users = $team->users;
-
-        $stageUsers = StageUser::query()
-            ->where('stage_id', $request->stage_id)
-            ->where('user_id', $request->user_id)->get();
 
         if( $stage->status === 'active')
         {

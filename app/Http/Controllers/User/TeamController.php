@@ -13,6 +13,7 @@ use App\Models\TeamInvite;
 use App\Models\TeamUser;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 class TeamController extends Controller
@@ -126,5 +127,36 @@ class TeamController extends Controller
             'result' => true,
             'teams' => $teams,
         ];
+    }
+
+    public function getTeamWithUsers($stageId)
+    {
+        $results = StageUser::query()
+            ->select([
+                'teams.id as team_id', 'users.id as user_id', 'teams.name as team_name',
+                'users.name as user_name', 'users.surname as user_surname', 'users.patronymic as user_patronymic',
+            ])
+            ->where('stage_user.stage_id', $stageId)
+            ->join('teams', 'stage_user.team_id', '=', 'teams.id')
+            ->join('users', 'stage_user.user_id', '=', 'users.id')
+            ->get();
+//            ->groupBy('team_id');
+
+        $teams = $results->groupBy('team_id')->map(function ($teamUsers) {
+            return [
+                'team_id' => $teamUsers[0]['team_id'],
+                'team_name' => $teamUsers[0]['team_name'],
+                'users' => $teamUsers->map(function ($user) {
+                    return [
+                        'id' => $user['user_id'],
+                        'name' => $user['user_name'],
+                        'surname' => $user['user_surname'],
+                        'patronymic' => $user['user_patronymic']
+                    ];
+                })->toArray()
+            ];
+        })->values();
+
+        return ['result'=>true, 'teams'=>$teams];
     }
 }

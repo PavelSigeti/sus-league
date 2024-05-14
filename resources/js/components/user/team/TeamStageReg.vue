@@ -56,6 +56,11 @@ const reg = async () => {
                 value: 'Команда зарегистрирована',
                 type: 'primary',
             });
+        } else {
+            store.dispatch('notification/displayMessage', {
+                value: ans.data.msg,
+                type: 'error',
+            });
         }
     } catch (e) {
         console.log(e.message);

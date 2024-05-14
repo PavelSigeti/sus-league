@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('race_user', function (Blueprint $table) {
+        Schema::create('race_team', function (Blueprint $table) {
             $table->id();
             $table->foreignId('race_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('team_id')->constrained()->onDelete('cascade');
             $table->integer('place')->nullable();
             $table->timestamps();
         });

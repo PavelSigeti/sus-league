@@ -10,21 +10,27 @@ use App\Actions\Admin\StageStartAction;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\RaceRepository;
 use App\Http\Repositories\StageRepository;
+use App\Http\Repositories\TeamRepository;
 use App\Http\Repositories\UserRepository;
+use App\Http\Requests\StageGroupCreateRequest;
 use App\Http\Requests\StageStoreRequest;
 use App\Http\Requests\StageUpdateRequest;
+use App\Models\Race;
+use App\Models\RaceTeam;
 use App\Models\Stage;
 
 class StageController extends Controller
 {
     protected $stageRepository;
     protected $raceRepository;
+    protected $teamRepository;
     protected $userRepository;
 
     public function __construct() {
         $this->stageRepository = app(StageRepository::class);
         $this->raceRepository = app(RaceRepository::class);
         $this->userRepository = app(UserRepository::class);
+        $this->teamRepository = app(TeamRepository::class);
     }
 
     public function store(StageStoreRequest $request) {
@@ -125,5 +131,46 @@ class StageController extends Controller
         ]));
 
         return true;
+    }
+
+    public function group(StageGroupCreateRequest $request, $id)
+    {
+        $stage = $this->stageRepository->getById($id);
+        $uniqueGroups = array_unique($request->groups);
+        $races = array();
+        foreach($uniqueGroups as $groupId) {
+            $races[$groupId] = Race::query()->create([
+                'stage_id' => $id,
+                'group_id' => $groupId,
+                'status' => 'group',
+            ]);
+        }
+        foreach ($request->groups as $teamId => $groupId) {
+            RaceTeam::query()->create([
+                'race_id' => $races[$groupId]['id'],
+                'team_id' => $teamId,
+            ]);
+        }
+
+        $stage->update(['status' => 'group']);
+
+        return ['result' => true];
+    }
+
+    public function removeTeamFromStage($teamId, $stageId)
+    {
+        $team = $this->teamRepository->getById($teamId);
+        $users = $team->users;
+
+        $stage = $this->stageRepository->getById($stageId);
+        if( $stage->status === 'active')
+        {
+            foreach ($users as $user) {
+                $user->stages()->detach($stageId);
+            }
+            return ['result' => true];
+        } else {
+            return ['result'=> false, 'msg' => 'Ошибка, этап находиться не в статусе распределения групп'];
+        }
     }
 }

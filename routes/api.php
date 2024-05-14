@@ -57,6 +57,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 Route::group(['middleware' => ['auth:sanctum',  'admin' ]], function () {
     Route::get('/admin', \App\Http\Controllers\Admin\DashboardController::class);
 
+    Route::get('/admin/team/users/{stageId}', [\App\Http\Controllers\User\TeamController::class, 'getTeamWithUsers']);
+
     Route::get('/admin/tournament', [\App\Http\Controllers\Admin\TournamentController::class, 'index']);
     Route::post('/admin/tournament/store', [\App\Http\Controllers\Admin\TournamentController::class, 'store']);
     Route::get('/admin/tournament/{id}', [\App\Http\Controllers\Admin\TournamentController::class, 'edit']);
@@ -66,6 +68,9 @@ Route::group(['middleware' => ['auth:sanctum',  'admin' ]], function () {
     Route::get('/admin/stage/{id}', [\App\Http\Controllers\Admin\StageController::class, 'tournament']);
     Route::get('/admin/stage/{id}/edit', [\App\Http\Controllers\Admin\StageController::class, 'edit']);
     Route::patch('/admin/stage/{id}/update', [\App\Http\Controllers\Admin\StageController::class, 'update']);
+
+    Route::post('/admin/remove-team/{teamId}/stage/{stageId}', [\App\Http\Controllers\Admin\StageController::class, 'removeTeamFromStage']);
+    Route::post('/admin/stage/{id}/group', [\App\Http\Controllers\Admin\StageController::class, 'group']);
 
     Route::post('/admin/stage/{id}/start', [\App\Http\Controllers\Admin\StageController::class, 'startStage']);
     Route::post('/admin/stage/{id}/finish', [\App\Http\Controllers\Admin\StageController::class, 'finish']);

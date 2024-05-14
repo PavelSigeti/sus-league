@@ -1004,6 +1004,16 @@ h1 {
     max-width: 1100px;
     width: 100%;
 }
+.result-table__first {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+.result-table__second {
+    font-size: .85em;
+    display: flex;
+    flex-direction: column;
+    color: #555;
+}
 .page-text {
     margin-bottom: 30px;
     font-size: 1.2em;

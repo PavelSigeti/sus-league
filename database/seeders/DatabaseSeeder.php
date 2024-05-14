@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(TournamentSeeder::class);
         $this->call(StageSeeder::class);
-        $this->call(StageUserSeeder::class);
+//        $this->call(StageUserSeeder::class);
         $this->call(UniversitySeeder::class);
         $this->call(PageSeeder::class);
 

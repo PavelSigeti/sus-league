@@ -53,7 +53,8 @@
                 </div>
                 <div class="col-12">
                     <div class="dashboard-item">
-                        <AppUsersTables v-if="status === 'active' && users" :users="users"></AppUsersTables>
+<!--                        <AppUsersTables v-if="status === 'active' && users" :users="users"></AppUsersTables>-->
+                        <TeamsSplit v-if="status === 'active'" :id="id"></TeamsSplit>
 
                         <div class="stage-table" v-if="status !== 'finished' && status !== 'active'" v-for="(groups, raceStatus, idx) in statusGroup" :key="idx">
                             <AppRaceTable v-for="groupId in groups"
@@ -88,6 +89,7 @@ import AppLoader from "@/components/ui/AppLoader.vue";
 import AppEditor from "@/components/admin/AppEditor.vue";
 import AppHeader from "@/components/ui/AppHeader.vue";
 import StageFiles from "@/components/admin/StageFiles.vue";
+import TeamsSplit from "@/components/admin/TeamsSplit.vue";
 
 const loading = ref(false);
 const route = useRoute();

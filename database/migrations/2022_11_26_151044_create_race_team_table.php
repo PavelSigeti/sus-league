@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('race_id')->constrained()->onDelete('cascade');
             $table->foreignId('team_id')->constrained()->onDelete('cascade');
             $table->integer('place')->nullable();
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

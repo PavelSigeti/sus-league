@@ -26,6 +26,7 @@ class StoreResultsRequest extends FormRequest
     {
         return [
             'result' => 'required|array',
+            'notes' => 'required|array',
         ];
     }
 }

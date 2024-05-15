@@ -62,7 +62,7 @@ class RaceRepository extends CoreRepository
     public function getRacePlace($id)
     {
         $columns = [
-            'team_id', 'place',
+            'team_id', 'place', 'note'
         ];
 
         $result = $this->startConditions()
@@ -71,10 +71,7 @@ class RaceRepository extends CoreRepository
             ->select($columns)
             ->where('race_id',$id)
             ->orderBy('team_id')
-            ->get()
-            ->mapWithKeys(function ($item) {
-                return [$item['team_id'] => $item['place']];
-            });
+            ->get();
 
         return $result;
     }

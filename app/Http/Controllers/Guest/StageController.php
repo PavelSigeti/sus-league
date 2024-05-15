@@ -34,8 +34,8 @@ class StageController extends Controller
         foreach ($groupStatus as $status => $group) {
             foreach ($group as $groupId) {
                 $result = $this->teamRepository->getGroupData($stageId, $groupId, $status);
-                $drops = $this->stageRepository->getStageDrops($stageId, $status);
-                $response[$status][$groupId] = $action($result, $drops);
+//                $drops = $this->stageRepository->getStageDrops($stageId, $status);
+                $response[$status][$groupId] = $action($result);
             }
         }
 

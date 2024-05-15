@@ -32,7 +32,7 @@ class TeamRepository extends CoreRepository
 //            })
             ->select('race_team.race_id', 'teams.id', 'race_team.place',
                 'races.group_id', 'races.stage_id',
-                'races.status', 'teams.name',
+                'races.status', 'teams.name', 'race_team.note',
             )
             ->where('races.stage_id', $stageId)
             ->where('races.group_id', $groupId)

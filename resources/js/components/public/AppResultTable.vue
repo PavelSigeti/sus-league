@@ -19,16 +19,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(user, idx) in group">
+                        <tr v-for="(team, idx) in group">
                             <td>{{idx+1}}</td>
                             <td>
                                 <div class="result-table__name">
-                                    {{user[0].name}} {{user[0].surname}}
+                                    {{team[0].name}}
                                 </div>
                             </td>
-                            <td v-for="race in user">
+                            <td v-for="race in team">
                                 {{
-                                    printValue(race, user.sum, group.length)
+                                    printValue(race, team.sum, group.length)
                                 }}
                             </td>
                         </tr>
@@ -64,15 +64,20 @@ const printValue = (race, sum, group) => {
     if(race.null) {
         return '—';
     }
-    if(race.drop) {
-        if( race.place === group + 1 ) {
-            return `(dnf, ${group + 1})`;
-        } else {
-            return `(${race.place})`;
-        }
+    if( race.note  ) {
+        return race.note;
     } else {
-        return race.place ?? sum;
+        return race.place;
     }
+    // if(race.drop) {
+    //     if( race.place === group + 1 ) {
+    //         return `(dnf, ${group + 1})`;
+    //     } else {
+    //         return `(${race.place})`;
+    //     }
+    // } else {
+    //     return race.place ?? sum;
+    // }
 };
 </script>
 

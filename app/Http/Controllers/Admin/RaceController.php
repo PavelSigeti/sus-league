@@ -33,13 +33,27 @@ class RaceController extends Controller
 
     public function getRacePlace($id)
     {
-        return $this->raceRepository->getRacePlace($id);
+
+        $result = $this->raceRepository->getRacePlace($id);
+
+        $places = $result
+            ->mapWithKeys(function ($item) {
+                return [$item['team_id'] => $item['place']];
+            });
+
+        $notes = $result
+            ->mapWithKeys(function ($item) {
+                return [$item['team_id'] => $item['note']];
+            });
+
+        return ['places' => $places, 'notes' => $notes];
     }
 
     public function storeResults(StoreResultsRequest $request, $id) {
 
         $race = $this->raceRepository->getById($id);
         $results = collect($request->result);
+        $notes = collect($request->notes);
         $count = $results->count();
 
 
@@ -47,7 +61,12 @@ class RaceController extends Controller
             return [$key => ['place' => $item === null ? $count+1 : $item]];
         });
 
+        $notes = $notes->mapWithKeys(function ($item, $key) {
+            return [$key => ['note' => $item ]];
+        });
+
         $race->teams()->sync($results);
+        $race->teams()->sync($notes);
 
         return true;
     }

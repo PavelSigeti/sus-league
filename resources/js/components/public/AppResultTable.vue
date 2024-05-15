@@ -64,10 +64,10 @@ const printValue = (race, sum, group) => {
     if(race.null) {
         return '—';
     }
-    if( race.note  ) {
+    if(race.note) {
         return race.note;
     } else {
-        return race.place;
+        return race.place ?? sum;
     }
     // if(race.drop) {
     //     if( race.place === group + 1 ) {

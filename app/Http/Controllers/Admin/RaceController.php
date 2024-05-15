@@ -26,6 +26,11 @@ class RaceController extends Controller
         return $this->raceRepository->getRaceUsers($id);
     }
 
+    public function getRaceTeams($id)
+    {
+        return $this->raceRepository->getRaceTeams($id);
+    }
+
     public function getRacePlace($id)
     {
         return $this->raceRepository->getRacePlace($id);
@@ -42,16 +47,16 @@ class RaceController extends Controller
             return [$key => ['place' => $item === null ? $count+1 : $item]];
         });
 
-        $race->users()->sync($results);
+        $race->teams()->sync($results);
 
         return true;
     }
 
     public function createRace(CreateRaceRequest $request, CreateRaceAction $action)
     {
-        $users = $this->raceRepository->getRaceUsers($request->lastRaceId)->keyBy('user_id');
+        $teams = $this->raceRepository->getRaceTeams($request->lastRaceId)->keyBy('team_id');
 
-        $result = $action($request, $users);
+        $result = $action($request, $teams);
 
         return $result;
     }

@@ -11,7 +11,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Яхтсмен</th>
+                            <th>Команда</th>
                             <th v-for="i in Object.keys(group[0]).length - 1">
                                 #{{i}}
                             </th>
@@ -39,51 +39,45 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import {onMounted, ref} from 'vue';
 
-export default {
-    name: "AppResultTable",
-    props: ['id'],
-    setup(props,) {
-        const results = ref();
-        const statusTitle = {
-            'default': 'Гонка',
-            'group': 'Группа',
-            'fleet': 'Флот',
-        };
+const props = defineProps(['id']);
 
-        onMounted(async () => {
-            try {
-                const response = await axios.get(`/api/stage/${props.id}`);
-                results.value = response.data;
-            } catch (e) {
-                console.log(e.message);
-            }
-        });
+const results = ref();
+const statusTitle = {
+    'default': 'Гонка',
+    'group': 'Группа',
+    'fleet': 'Флот',
+};
 
-        const printValue = (race, sum, group) => {
-            if(race.null) {
-                return '—';
-            }
-            if(race.drop) {
-                if( race.place === group + 1 ) {
-                    return `(dnf, ${group + 1})`;
-                } else {
-                    return `(${race.place})`;
-                }
-            } else {
-                return race.place ?? sum;
-            }
-        };
-
-        return {
-            results, statusTitle, printValue,
-        }
+onMounted(async () => {
+    try {
+        const response = await axios.get(`/api/stage/${props.id}`);
+        results.value = response.data;
+    } catch (e) {
+        console.log(e.message);
     }
-}
+});
+
+const printValue = (race, sum, group) => {
+    if(race.null) {
+        return '—';
+    }
+    if(race.drop) {
+        if( race.place === group + 1 ) {
+            return `(dnf, ${group + 1})`;
+        } else {
+            return `(${race.place})`;
+        }
+    } else {
+        return race.place ?? sum;
+    }
+};
 </script>
 
 <style scoped>
-
+.result-table__item {
+    margin-top: 30px;
+}
 </style>

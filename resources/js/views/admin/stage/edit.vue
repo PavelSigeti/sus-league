@@ -68,7 +68,7 @@
 
                         <TheStageStatus v-if="status" :status="status" :id="id" @update="statusGroupFetch"/>
 
-                        <AppResultTable v-if="status !== 'active'" :id="id" ref="resultComponent" />
+                        <AppResultTable v-if="status !== 'active'" :id="id" :key="resultComponent" />
                     </div>
                 </div>
             </div>
@@ -112,7 +112,7 @@ const race_amount_fleet_drop = ref();
 const child = ref(null);
 
 const statusGroup = ref();
-const resultComponent = ref();
+const resultComponent = ref(1);
 
 const statusGroupFetch = async (payload) => {
     try {
@@ -120,7 +120,7 @@ const statusGroupFetch = async (payload) => {
         statusGroup.value = statusGroupData.data;
         status.value = payload;
         if(resultComponent.value) {
-            resultComponent.value.update();
+            resultComponent.value++;
         }
     } catch (e) {
         console.log(e.message);

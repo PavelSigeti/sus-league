@@ -62,18 +62,18 @@ class RaceRepository extends CoreRepository
     public function getRacePlace($id)
     {
         $columns = [
-            'user_id', 'place',
+            'team_id', 'place',
         ];
 
         $result = $this->startConditions()
-            ->join('race_user', 'races.id', '=', 'race_user.race_id')
-            ->join('users', 'race_user.user_id', '=', 'users.id')
+            ->join('race_team', 'races.id', '=', 'race_team.race_id')
+            ->join('teams', 'race_team.team_id', '=', 'teams.id')
             ->select($columns)
             ->where('race_id',$id)
-            ->orderBy('user_id')
+            ->orderBy('team_id')
             ->get()
             ->mapWithKeys(function ($item) {
-                return [$item['user_id'] => $item['place']];
+                return [$item['team_id'] => $item['place']];
             });
 
         return $result;
@@ -122,5 +122,23 @@ class RaceRepository extends CoreRepository
             ->min('id');
 
         return $result;
+    }
+
+    public function getRaceTeams($id)
+    {
+        $columns = [
+            'teams.id as team_id', 'teams.name as team_name', 'races.id as race_id',
+        ];
+
+        $result = $this->startConditions()
+            ->select($columns)
+            ->join('race_team', 'races.id', '=', 'race_team.race_id')
+            ->join('teams', 'race_team.team_id', '=', 'teams.id')
+            ->where('races.id', $id)
+            ->get();
+
+        return $result;
+
+
     }
 }

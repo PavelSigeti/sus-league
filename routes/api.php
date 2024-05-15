@@ -83,6 +83,7 @@ Route::group(['middleware' => ['auth:sanctum',  'admin' ]], function () {
     Route::get('/admin/stage/{stageId}/races/{status}/group/{groupId}', [\App\Http\Controllers\Admin\RaceController::class, 'getStageRaces']);
     Route::get('/admin/race/{id}', [\App\Http\Controllers\Admin\RaceController::class, 'getRacePlace']);
     Route::get('/admin/race/{id}/users', [\App\Http\Controllers\Admin\RaceController::class, 'getRaceUsers']);
+    Route::get('/admin/race/{id}/teams', [\App\Http\Controllers\Admin\RaceController::class, 'getRaceTeams']);
 
     Route::post('/admin/race/create', [\App\Http\Controllers\Admin\RaceController::class, 'createRace']);
     Route::post('/admin/race/{id}/remove', [\App\Http\Controllers\Admin\RaceController::class, 'destroy']);

@@ -4,15 +4,15 @@
         <button class="btn btn-default btn-settings mb15" @click="addRace">Добавить гонку</button>
         <div class="race-table__header">
             <div class="race-table__row">
-                <div class="race-table__item race-table__name">Яхтсмен</div>
+                <div class="race-table__item race-table__name">Команда</div>
                 <div class="race-table__item race-table__result" v-for="i in raceAmount" :key="i">#{{i}}</div>
                 <div class="race-table__item race-table__total">Итог</div>
             </div>
         </div>
         <div class="race-table__body">
             <div class="race-table__column">
-                <div class="race-table__item race-table__name" v-for="user in usersData" :key="user.user_id">
-                    {{user.id}} {{user.surname}} {{user.name}}
+                <div class="race-table__item race-table__name" v-for="team in teams" :key="team.team_id">
+                    {{team.team_name}}
                 </div>
             </div>
             <div class="race-table__column" v-for="(race, idx) in raceData" :key="race.race_id">
@@ -36,7 +36,7 @@ import AppRaceColumn from "@/components/admin/AppRaceColumn.vue";
 
 const props = defineProps(['stageId', 'status', 'groupId']);
 const raceData = ref({});
-const usersData = ref({});
+const teams = ref({});
 const lastRaceId = ref();
 const totalData = ref();
 
@@ -65,8 +65,8 @@ onMounted(async () => {
         raceData.value = races.data;
 
         lastRaceId.value = raceData.value[0].race_id;
-        const users = await axios.get(`/api/admin/race/${lastRaceId.value}/users`);
-        usersData.value = users.data;
+        const teamData = await axios.get(`/api/admin/race/${lastRaceId.value}/teams`);
+        teams.value = teamData.data;
         await getTotal();
     } catch (e) {
         console.log(e.message);

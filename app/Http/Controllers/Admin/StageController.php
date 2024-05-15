@@ -113,7 +113,7 @@ class StageController extends Controller
 
     public function getTotal($stageId, $groupId, $status, CalcTotalAction $action)
     {
-        $result = $this->userRepository->getGroupData($stageId, $groupId, $status);
+        $result = $this->teamRepository->getGroupData($stageId, $groupId, $status);
         $drops = $this->stageRepository->getStageDrops($stageId, $status);
 
         return $action($result, $drops);

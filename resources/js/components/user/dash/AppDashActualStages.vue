@@ -1,4 +1,5 @@
 <template>
+
     <AppDashStages
         v-for="stage in stages"
         :key="stage.id"

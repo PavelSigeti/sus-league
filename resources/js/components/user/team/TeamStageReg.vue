@@ -30,6 +30,7 @@ const status = ref(props.status);
 const teams = ref([]);
 const select = ref(null);
 const teamReg = ref({});
+const stage = ref({});
 
 onMounted(async () => {
    const response = await axios.get('/api/team/capitan');
@@ -39,6 +40,9 @@ onMounted(async () => {
        const teamResp = await axios.get(`/api/stage/${props.stage}/reg-info`);
        teamReg.value = teamResp.data.team;
    }
+
+    // TODO: Отказаться скрыть
+   // stage.value = await axios.get().data;
 });
 
 const reg = async () => {

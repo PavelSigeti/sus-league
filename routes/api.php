@@ -52,12 +52,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::delete('/user/file/{type}', [\App\Http\Controllers\User\UserFileController::class, 'destroy']);
 
     Route::get('/stage/{id}/files', [\App\Http\Controllers\Admin\StageFileController::class, 'getStageFiles']);
+    Route::get('/team/users/{stageId}', [\App\Http\Controllers\User\TeamController::class, 'getTeamWithUsers']);
 });
 
 Route::group(['middleware' => ['auth:sanctum',  'admin' ]], function () {
     Route::get('/admin', \App\Http\Controllers\Admin\DashboardController::class);
-
-    Route::get('/admin/team/users/{stageId}', [\App\Http\Controllers\User\TeamController::class, 'getTeamWithUsers']);
 
     Route::get('/admin/tournament', [\App\Http\Controllers\Admin\TournamentController::class, 'index']);
     Route::post('/admin/tournament/store', [\App\Http\Controllers\Admin\TournamentController::class, 'store']);

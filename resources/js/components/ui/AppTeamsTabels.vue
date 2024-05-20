@@ -29,7 +29,7 @@ const teams = ref([]);
 const props = defineProps(['id']);
 
 onMounted(async () => {
-    const ans = await axios.get(`/api/admin/team/users/${props.id}`);
+    const ans = await axios.get(`/api/team/users/${props.id}`);
     if(ans.data.result) {
         teams.value = ans.data.teams;
     }

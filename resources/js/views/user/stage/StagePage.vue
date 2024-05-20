@@ -33,7 +33,7 @@
                         <div class="content" v-html="stage.description"></div>
                     </div>
                     <div class="dashboard-item" v-if="stage && stage.status === 'active'">
-                        <AppUsersTables :users="stage.users"  />
+                        <AppTeamsTabels :id="id"  />
                     </div>
                     <div class="dashboard-item" v-if="stage && stage.status !== 'active'">
                         <AppResultTable :id="id" />
@@ -47,10 +47,10 @@
 <script setup>
 import AppHeader from "@/components/ui/AppHeader.vue";
 import AppResultTable from "@/components/public/AppResultTable.vue";
-import AppUsersTables from "@/components/ui/AppUsersTables.vue";
 import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {time} from "@/utils/time.js";
+import AppTeamsTabels from "@/components/ui/AppTeamsTabels.vue";
 
 const stage = ref({});
 const route = useRoute();

@@ -69,15 +69,6 @@ const printValue = (race, sum, group) => {
     } else {
         return race.place ?? sum;
     }
-    // if(race.drop) {
-    //     if( race.place === group + 1 ) {
-    //         return `(dnf, ${group + 1})`;
-    //     } else {
-    //         return `(${race.place})`;
-    //     }
-    // } else {
-    //     return race.place ?? sum;
-    // }
 };
 </script>
 

@@ -18,6 +18,7 @@ use App\Http\Requests\StageUpdateRequest;
 use App\Models\Race;
 use App\Models\RaceTeam;
 use App\Models\Stage;
+use App\Models\StageTeam;
 
 class StageController extends Controller
 {
@@ -56,15 +57,6 @@ class StageController extends Controller
     public function getStageStatusGroup($id)
     {
         return $this->raceRepository->getStageStatusGroup($id);
-    }
-
-    public function startStage($id, StageStartAction $action)
-    {
-        $stage = $this->stageRepository->getByIdWithRaces($id);
-        if($stage->status !== 'active') {
-            abort(400, 'Этап уже начался, обновите страницу');
-        }
-        return $action($stage);
     }
 
     public function finish($id, SortGroupResultAction $sortAction, FinishStage $finishStage)
@@ -150,6 +142,10 @@ class StageController extends Controller
                 'race_id' => $races[$groupId]['id'],
                 'team_id' => $teamId,
             ]);
+            StageTeam::query()->create([
+               'stage_id' => $id,
+               'team_id' => $teamId,
+            ]);
         }
 
         $stage->update(['status' => 'group']);
@@ -173,4 +169,10 @@ class StageController extends Controller
             return ['result'=> false, 'msg' => 'Ошибка, этап находиться не в статусе распределения групп'];
         }
     }
+
+    public function getStageResults($id)
+    {
+        return StageTeam::query()->where(['stage_id' => $id])->get();
+    }
+
 }

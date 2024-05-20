@@ -53,7 +53,6 @@
                 </div>
                 <div class="col-12">
                     <div class="dashboard-item">
-<!--                        <AppUsersTables v-if="status === 'active' && users" :users="users"></AppUsersTables>-->
                         <TeamsSplit v-if="status === 'active'" :id="id"></TeamsSplit>
 
                         <div class="stage-table" v-if="status !== 'finished' && status !== 'active'" v-for="(groups, raceStatus, idx) in statusGroup" :key="idx">
@@ -81,7 +80,6 @@
 import {onMounted, ref} from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
-import AppUsersTables from "@/components/ui/AppUsersTables.vue";
 import AppRaceTable from "@/components/admin/AppRaceTable.vue";
 import TheStageStatus from "@/components/admin/TheStageStatus.vue";
 import AppResultTable from "@/components/public/AppResultTable.vue";

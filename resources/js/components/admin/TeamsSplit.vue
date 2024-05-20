@@ -28,7 +28,7 @@
         </tr>
         </tbody>
     </table>
-    <button class="btn btn-default btn-settings" @click="createGroup">Сформировать группы</button>
+    <button class="btn btn-default btn-settings mt15" @click="createGroup">Сформировать группы</button>
 </template>
 
 <script setup>

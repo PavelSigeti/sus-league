@@ -8,7 +8,6 @@
         <button @click="submit">Сохранить</button>
     </div>
 
-
 </template>
 
 <script setup>

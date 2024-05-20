@@ -72,12 +72,13 @@ Route::group(['middleware' => ['auth:sanctum',  'admin' ]], function () {
     Route::post('/admin/remove-team/{teamId}/stage/{stageId}', [\App\Http\Controllers\Admin\StageController::class, 'removeTeamFromStage']);
     Route::post('/admin/stage/{id}/group', [\App\Http\Controllers\Admin\StageController::class, 'group']);
 
-    Route::post('/admin/stage/{id}/start', [\App\Http\Controllers\Admin\StageController::class, 'startStage']);
     Route::post('/admin/stage/{id}/finish', [\App\Http\Controllers\Admin\StageController::class, 'finish']);
     Route::post('/admin/stage/{id}/finish-group', [\App\Http\Controllers\Admin\StageController::class, 'finishGroup']);
 
     Route::get('/admin/stage/{stageId}/races', [\App\Http\Controllers\Admin\RaceController::class, 'getStageRaces']);
     Route::get('/admin/stage/{id}/meta', [\App\Http\Controllers\Admin\StageController::class, 'getStageStatusGroup']);
+
+    Route::get('/admin/stage/{id}/results', [\App\Http\Controllers\Admin\StageController::class, 'getStageResults']);
 
     Route::post('/admin/race/{id}/results', [\App\Http\Controllers\Admin\RaceController::class, 'storeResults']);
     Route::get('/admin/stage/{stageId}/races/{status}/group/{groupId}', [\App\Http\Controllers\Admin\RaceController::class, 'getStageRaces']);

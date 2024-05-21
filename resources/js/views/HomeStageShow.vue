@@ -15,7 +15,7 @@
                         <div class="content" v-html="stage.description"></div>
                     </div>
                     <div class="dashboard-item" v-if="stage && stage.status === 'active'">
-                        <AppUsersTables :users="stage.users"  />
+                        <AppTeamsTabels :id="id"  />
                     </div>
                     <div class="dashboard-item" v-if="stage && stage.status !== 'active'">
                         <AppResultTable :id="id" />
@@ -33,10 +33,12 @@ import AppHomeHeader from "../components/ui/AppHomeHeader.vue";
 import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {time} from "@/utils/time.js";
+import AppTeamsTabels from "@/components/ui/AppTeamsTabels.vue";
 
 export default {
     name: "HomeStageShow",
     components: {
+        AppTeamsTabels,
         AppResultTable, AppUsersTables, AppHomeHeader,
     },
     setup() {

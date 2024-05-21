@@ -52,7 +52,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::delete('/user/file/{type}', [\App\Http\Controllers\User\UserFileController::class, 'destroy']);
 
     Route::get('/stage/{id}/files', [\App\Http\Controllers\Admin\StageFileController::class, 'getStageFiles']);
-    Route::get('/team/users/{stageId}', [\App\Http\Controllers\User\TeamController::class, 'getTeamWithUsers']);
+
 });
 
 Route::group(['middleware' => ['auth:sanctum',  'admin' ]], function () {
@@ -125,5 +125,7 @@ Route::group([], function () {
     Route::get('/page/{slug}', [\App\Http\Controllers\User\PageController::class, 'show']);
 
     Route::get('/stage/{id}/show', [\App\Http\Controllers\Guest\StageController::class, 'show']);
+
+    Route::get('/team/users/{stageId}', [\App\Http\Controllers\User\TeamController::class, 'getTeamWithUsers']);
 });
 

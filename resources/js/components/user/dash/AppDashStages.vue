@@ -10,7 +10,7 @@
             <span>Начало регистрации: {{time(stage.register_start)}}</span>
             <span>Окончание регистрации: {{time(stage.register_end)}}</span>
         </div>
-        <div class="btn btn-disable btn-settings-280" v-if="time(stage.register_start) > now">
+        <div class="btn btn-disable btn-settings-280" v-if="new Date(stage.register_start) > now">
             Регистрация не началась
         </div>
 
@@ -22,11 +22,11 @@
             @cancel="teamReg=false; stage.users_exists = false"
         />
         <div
-            v-if="stage.status === 'active' && time(stage.register_end) > now && !teamReg && !stage.users_exists"
+            v-if="stage.status === 'active' && new Date(stage.register_end) > now && !teamReg && !stage.users_exists"
             :class="['btn', 'btn-settings-280', 'btn-default']"
             @click="teamReg=true"
         >Принять участие</div>
-        <div class="btn btn-disable btn-settings-280" v-if="time(stage.register_end) < now">
+        <div class="btn btn-disable btn-settings-280" v-if="new Date(stage.register_end) < now">
             Регистрация закончилась
         </div>
     </div>
@@ -42,8 +42,7 @@ import TeamStageReg from "@/components/user/team/TeamStageReg.vue";
 const props = defineProps(['stage']);
 
 const getDate = () => {
-    const dateArr = new Date().toLocaleString("ru-RU", {timeZone: "Europe/Moscow"}).split(',');
-    now.value = `${dateArr[0]} ${dateArr[1]}`;
+    now.value = new Date();
 }
 
 const store = useStore();
@@ -57,38 +56,10 @@ onMounted(()=>{
     getDate();
 });
 
-const updateTimeInterval = setInterval(getDate, 1000);
+const updateTimeInterval = setInterval(getDate, 10000);
 onBeforeUnmount(() => {
     clearInterval(updateTimeInterval);
 });
-
-const toggleReg = async () => {
-    loading.value = true;
-    try {
-        if(!stage.value.users_exists) {
-            await axios.post(`/api/stage/${stage.value.id}/accept`);
-            stage.value.users_exists = true;
-            store.dispatch('notification/displayMessage', {
-                value: 'Вы зарегестированы на регату',
-                type: 'primary',
-            });
-        } else {
-            await axios.post(`/api/stage/${stage.value.id}/cancel`);
-            stage.value.users_exists = false;
-            store.dispatch('notification/displayMessage', {
-                value: 'Вы успешно отказались от участие в регате',
-                type: 'primary',
-            });
-        }
-    } catch (e) {
-        console.log(e.message);
-        store.dispatch('notification/displayMessage', {
-            value: e.response.data.message,
-            type: 'error',
-        });
-    }
-    loading.value = false;
-};
 </script>
 
 <style scoped>

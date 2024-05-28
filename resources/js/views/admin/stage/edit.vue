@@ -53,7 +53,7 @@
                 </div>
                 <div class="col-12">
                     <div class="dashboard-item">
-                        <TeamsSplit v-if="status === 'active'" :id="id"></TeamsSplit>
+                        <TeamsSplit v-if="status === 'active'" :id="id" @upd="status = 'group'"></TeamsSplit>
 
                         <div class="stage-table" v-if="status !== 'finished' && status !== 'active'" v-for="(groups, raceStatus, idx) in statusGroup" :key="idx">
                             <AppRaceTable v-for="groupId in groups"

@@ -35,6 +35,7 @@
 import {onMounted, ref} from "vue";
 import {useStore} from "vuex";
 
+const emit = defineEmits(['upd']);
 const props = defineProps(['id']);
 const teams = ref([]);
 const result = ref({});
@@ -53,7 +54,7 @@ const createGroup = async () => {
     });
 
     if(ans.data.result) {
-        console.log(ans.data)
+        emit('upd');
     } else {
         store.dispatch('notification/displayMessage', {
             type: 'error',

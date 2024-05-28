@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="race-table__column">
-                <StageResultPoints :id="props.stageId" />
+                <StageResultPoints :id="props.stageId" :groupId="props.groupId" />
             </div>
         </div>
     </div>

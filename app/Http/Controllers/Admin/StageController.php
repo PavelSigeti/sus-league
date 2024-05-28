@@ -15,6 +15,7 @@ use App\Http\Repositories\UserRepository;
 use App\Http\Requests\StageGroupCreateRequest;
 use App\Http\Requests\StageStoreRequest;
 use App\Http\Requests\StageUpdateRequest;
+use App\Http\Requests\StoreTeamResultRequest;
 use App\Models\Race;
 use App\Models\RaceTeam;
 use App\Models\Stage;
@@ -61,7 +62,6 @@ class StageController extends Controller
 
     public function finish($id, SortGroupResultAction $sortAction, FinishStage $finishStage)
     {
-
         $stage = $this->stageRepository->getById($id);
         $status = $stage->status;
 
@@ -172,7 +172,35 @@ class StageController extends Controller
 
     public function getStageResults($id)
     {
-        return StageTeam::query()->where(['stage_id' => $id])->get();
+//        return StageTeam::query()
+//            ->join('races', 'races.stage_id', '=', 'stage_team.stage_id')
+//            ->where(['stage_team.stage_id' => $id])
+//            ->get()
+//            ->groupBy('team_id');
+        return StageTeam::query()
+            ->addSelect([
+            'group_id' => Race::select('group_id')
+                ->join('race_team', 'race_team.race_id', '=', 'races.id')
+                ->whereColumn('races.stage_id', 'stage_team.stage_id')
+                ->whereColumn('race_team.team_id', 'stage_team.team_id')
+                ->limit(1)
+        ])
+            ->where(['stage_team.stage_id' => $id])
+            ->get();
+    }
+
+    public function storeTeamResult(StoreTeamResultRequest $request)
+    {
+        foreach ($request->results as $team_id => $place) {
+            StageTeam::query()
+                ->where('stage_id', $request->stage_id)
+                ->where('team_id', $team_id)
+                ->update([
+                    'result' => $place,
+                ]);
+        }
+
+        return ['result' => true];
     }
 
 }

@@ -4,30 +4,30 @@
         <div class="container-fluid g-0">
             <div class="row">
                 <div class="col-12">
-<!--                    <div class="tabs">-->
-<!--                        <div-->
-<!--                            :class="['tab-item', {'tab-item__active': section === 'user'}]"-->
-<!--                            @click="section = 'user'"-->
-<!--                        >Личный зачет</div>-->
-<!--                        <div-->
-<!--                            :class="['tab-item', {'tab-item__active': section === 'team'}]"-->
-<!--                            @click="section = 'team'"-->
-<!--                        >Командный зачет</div>-->
-<!--                        <div-->
-<!--                            :class="['tab-item', {'tab-item__active': section === 'university'}]"-->
-<!--                            @click="section = 'university'"-->
-<!--                        >Университетский зачет</div>-->
-<!--                    </div>-->
+                    <div class="tabs">
+                        <div
+                            :class="['tab-item', {'tab-item__active': section === 'user'}]"
+                            @click="section = 'user'"
+                        >Личный зачет</div>
+                        <div
+                            :class="['tab-item', {'tab-item__active': section === 'team'}]"
+                            @click="section = 'team'"
+                        >Командный зачет</div>
+                        <div
+                            :class="['tab-item', {'tab-item__active': section === 'university'}]"
+                            @click="section = 'university'"
+                        >Университетский зачет</div>
+                    </div>
                 </div>
                 <div class="col-12">
                     <AppUsersRating v-if="section === 'user'" />
 
-                    <!--                    <keep-alive>-->
-<!--                        <AppTeamRating v-if="section === 'team'" />-->
-<!--                    </keep-alive>-->
-<!--                    <keep-alive>-->
-<!--                        <AppUniversityRating v-if="section === 'university'" />-->
-<!--                    </keep-alive>-->
+                    <keep-alive>
+                        <AppTeamRating v-if="section === 'team'" />
+                    </keep-alive>
+                    <keep-alive>
+                        <AppUniversityRating v-if="section === 'university'" />
+                    </keep-alive>
                 </div>
             </div>
         </div>

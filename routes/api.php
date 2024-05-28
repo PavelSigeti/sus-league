@@ -118,8 +118,8 @@ Route::group([], function () {
     Route::get('/universities', [\App\Http\Controllers\Guest\RegistrationController::class, 'universities']);
     Route::post('/email', [\App\Http\Controllers\Guest\RegistrationController::class, 'email']);
     Route::get('/rating/users', [\App\Http\Controllers\Guest\RatingController::class, 'usersRating']);
-//    Route::get('/rating/university', [\App\Http\Controllers\Guest\RatingController::class, 'universityRating']);
-//    Route::get('/rating/team', [\App\Http\Controllers\Guest\RatingController::class, 'teamRating']);
+    Route::get('/rating/university', [\App\Http\Controllers\Guest\RatingController::class, 'universityRating']);
+    Route::get('/rating/team', [\App\Http\Controllers\Guest\RatingController::class, 'teamRating']);
 
     Route::get('/home/stage/ended',[\App\Http\Controllers\Guest\StageController::class, 'getEnded']);
     Route::get('/home/stage/actual',[\App\Http\Controllers\Guest\StageController::class, 'getActual']);

@@ -19,47 +19,35 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import {onMounted, ref} from "vue";
 import AppLoader from "../ui/AppLoader.vue";
 
-export default {
-    name: "AppUniversityRating",
-    components: {
-        AppLoader
-    },
-    setup() {
-        const loading = ref(false);
-        const link = ref('/api/rating/university');
-        const data = ref(false);
+const loading = ref(false);
+const link = ref('/api/rating/university');
+const data = ref(false);
 
-        onMounted(async () => {
-            try {
-                const response = await axios.get(link.value);
-                data.value = response.data;
-            } catch (e) {
-                console.log(e.message);
-            }
-        });
+onMounted(async () => {
+    try {
+        const response = await axios.get(link.value);
+        data.value = response.data;
+    } catch (e) {
+        console.log(e.message);
+    }
+});
 
-        const load = async () => {
-            loading.value = true;
-            try {
-                const response = await axios.get(data.value.next_page_url);
-                data.value.data.push(...response.data.data);
-                data.value.next_page_url = response.data.next_page_url;
-                data.value.current_page = response.data.current_page;
-            } catch (e) {
-                console.log(e.message);
-            }
-            loading.value = false;
-        };
-
-        return {
-            data, load, loading,
-        }
-    },
-}
+const load = async () => {
+    loading.value = true;
+    try {
+        const response = await axios.get(data.value.next_page_url);
+        data.value.data.push(...response.data.data);
+        data.value.next_page_url = response.data.next_page_url;
+        data.value.current_page = response.data.current_page;
+    } catch (e) {
+        console.log(e.message);
+    }
+    loading.value = false;
+};
 </script>
 
 <style scoped>

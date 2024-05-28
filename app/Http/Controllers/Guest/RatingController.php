@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Guest;
 
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\StageResultRepository;
+use App\Models\StageResult;
+use App\Models\StageTeam;
+use Illuminate\Support\Facades\DB;
 
 class RatingController extends Controller
 {
@@ -26,6 +29,20 @@ class RatingController extends Controller
 
     public function teamRating()
     {
-        return $this->stageResultRepository->getTeamRating();
+        $columns = [
+            'teams.name',
+            DB::raw('SUM(result) as total')
+        ];
+
+
+        $result = StageTeam::query()
+            ->join('teams', 'stage_team.team_id', '=', 'teams.id')
+            ->select($columns)
+            ->groupBy('team_id')
+            ->orderBy('total', 'DESC')
+            ->paginate(10);
+
+        return $result;
+
     }
 }

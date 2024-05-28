@@ -1,6 +1,6 @@
 <template>
     <button class="btn btn-default btn-settings mt15" @click="finishGroupStage" v-if="status === 'group'">Завершить групповой этап</button>
-    <button class="btn btn-default btn-settings" @click="finishStage" v-if="status === 'default' || status === 'fleet'">Завершить регату</button>
+<!--    <button class="btn btn-default btn-settings" @click="finishStage" v-if="status === 'default' || status === 'fleet'">Завершить регату</button>-->
 </template>
 
 <script setup>

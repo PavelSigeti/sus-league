@@ -19,6 +19,7 @@ use App\Http\Requests\StoreTeamResultRequest;
 use App\Models\Race;
 use App\Models\RaceTeam;
 use App\Models\Stage;
+use App\Models\StageResult;
 use App\Models\StageTeam;
 use App\Models\StageUser;
 
@@ -82,7 +83,7 @@ class StageController extends Controller
         return abort(400, 'Этап уже закончился, обновите страницу');
     }
 
-    public function finishGroup($id, SortGroupResultAction $sortAction, CreateFleetsAction $createFleetsAction)
+    public function finishGroup($id)
     {
         $stage = $this->stageRepository->getById($id);
         $status = $stage->status;
@@ -91,17 +92,9 @@ class StageController extends Controller
             abort(400, 'Групповой этап уже закончился, обновите страницу');
         }
 
-        $groups = $this->raceRepository->getStageStatusGroup($id)[$status];
+        $stage->update(['status'=>'finished']);
 
-        $drops = $this->stageRepository->getStageDrops($id, $status);
-
-        $groupsResult = [];
-        foreach($groups as $groupId) {
-            $result = $this->userRepository->getGroupData($id, $groupId, $status);
-            $groupsResult[$groupId] = $sortAction($result, $drops);
-        }
-
-        return $createFleetsAction($groupsResult, $stage);
+        return ['result'=> true];
     }
 
     public function getTotal($stageId, $groupId, $status, CalcTotalAction $action)
@@ -206,12 +199,24 @@ class StageController extends Controller
 
     public function storeUserResult(StoreTeamResultRequest $request)
     {
-        $teamUsers = StageUser::query()
-            ->where('stage_id', $request->stage_id)
-            ->get()
-            ->groupBy('team_id');
+        foreach ($request->results as $team_id => $result) {
+            $teamUsers = StageUser::query()
+                ->where('stage_id', $request->stage_id)
+                ->where('team_id', $team_id)
+                ->get();
+            foreach ($teamUsers as $user) {
+                StageResult::query()->updateOrCreate([
+                    'stage_id' => $request->stage_id,
+                    'user_id' => $user->user_id,
+                ],
+                [
+                    'result' => $result,
+                ]);
+            }
+        }
 
-        return $teamUsers;
+
+        return ['result' => true];
 
 
         return ['result' => true];

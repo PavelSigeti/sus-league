@@ -7,7 +7,8 @@
                 <div class="race-table__item race-table__name">Команда</div>
                 <div class="race-table__item race-table__result" v-for="i in raceAmount" :key="i">#{{i}}</div>
                 <div class="race-table__item race-table__total">Итог</div>
-                <div class="race-table__item race-table__total race-table__final">Баллов в зачет</div>
+                <div class="race-table__item race-table__total race-table__final">Командный зачет</div>
+                <div class="race-table__item race-table__total race-table__final">Личный зачет</div>
             </div>
         </div>
         <div class="race-table__body">
@@ -30,6 +31,9 @@
             <div class="race-table__column">
                 <StageResultPoints :id="props.stageId" :groupId="props.groupId" />
             </div>
+            <div class="race-table__column">
+                <StageUsersResults :id="props.stageId" :groupId="props.groupId" />
+            </div>
         </div>
     </div>
 </template>
@@ -38,6 +42,7 @@
 import {ref, onMounted, computed} from "vue";
 import AppRaceColumn from "@/components/admin/AppRaceColumn.vue";
 import StageResultPoints from "@/components/admin/StageResultPoints.vue";
+import StageUsersResults from "@/components/admin/StageUsersResults.vue";
 
 const props = defineProps(['stageId', 'status', 'groupId']);
 const raceData = ref({});

@@ -20,6 +20,7 @@ use App\Models\Race;
 use App\Models\RaceTeam;
 use App\Models\Stage;
 use App\Models\StageTeam;
+use App\Models\StageUser;
 
 class StageController extends Controller
 {
@@ -199,6 +200,19 @@ class StageController extends Controller
                     'result' => $place,
                 ]);
         }
+
+        return ['result' => true];
+    }
+
+    public function storeUserResult(StoreTeamResultRequest $request)
+    {
+        $teamUsers = StageUser::query()
+            ->where('stage_id', $request->stage_id)
+            ->get()
+            ->groupBy('team_id');
+
+        return $teamUsers;
+
 
         return ['result' => true];
     }

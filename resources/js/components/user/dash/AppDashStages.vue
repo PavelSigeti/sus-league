@@ -22,7 +22,7 @@
             @cancel="teamReg=false; stage.users_exists = false"
         />
         <div
-            v-if="stage.status === 'active' && new Date(stage.register_end) > now && !teamReg && !stage.users_exists"
+            v-if="stage.status === 'active' && new Date(stage.register_start) < now && !teamReg && !stage.users_exists"
             :class="['btn', 'btn-settings-280', 'btn-default']"
             @click="teamReg=true"
         >Принять участие</div>

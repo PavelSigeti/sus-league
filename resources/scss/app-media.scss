@@ -95,7 +95,7 @@
     .home-main {
         padding: 30px;
         h1 {
-            font-size: 2.5em;
+            font-size: 2.2em;
         }
     }
     .home-link {
@@ -188,14 +188,14 @@
     }
     .home-main {
         h1 {
-            font-size: 2em;
+            font-size: 1.8em;
         }
     }
     .home-link {
         font-size: 1.5em;
     }
     .logo {
-        width: 120px;
+        width: 200px;
     }
     .support-btn {
         font-size: .8em;
@@ -224,7 +224,7 @@
     }
     .home-main {
         h1 {
-            font-size: 1.75em;
+            font-size: 1.5em;
         }
         .btn {
             height: 40px;
@@ -241,9 +241,7 @@
     }
 }
 @media screen and (max-width: 360px){
-    .logo {
-        width: 90px;
-    }
+
 }
 @media screen and (max-width: 320px) {
 

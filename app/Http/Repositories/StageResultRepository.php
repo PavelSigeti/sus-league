@@ -16,7 +16,7 @@ class StageResultRepository extends CoreRepository
     public function getUsersRating()
     {
         $columns = [
-            'name', 'surname', 'user_id',
+            'name', 'surname', 'user_id', 'patronymic',
             DB::raw('SUM(result) as total')
         ];
 

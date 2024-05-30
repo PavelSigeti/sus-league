@@ -103,7 +103,7 @@ class StageRepository extends CoreRepository
         $columns = [
             'stages.id', 'register_start', 'register_end',
             'stages.title', 'tournaments.title as tournament',
-            'status',
+            'status', 'excerpt',
         ];
 
         $result = $this->startConditions()

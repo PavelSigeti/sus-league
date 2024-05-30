@@ -21,12 +21,10 @@
         />
 
     </div>
-    <div class="dashboard-item" v-if="invites && invites.length > 0">
-        <AppTeamInvite
-            @update="getData"
-            @load="toggleLoad"
-        />
-    </div>
+    <AppTeamInvite
+        @update="getData"
+        @load="toggleLoad"
+    />
 </template>
 
 <script setup>

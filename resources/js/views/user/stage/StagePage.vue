@@ -9,6 +9,7 @@
                             <span>Начало регистрации: {{time(stage.register_start)}}</span>
                             <span>Окончание регистрации: {{time(stage.register_end)}}</span>
                         </div>
+                        <div v-if="stage.excerpt" class="user-stage__excerpt content" v-html="stage.excerpt"></div>
                     </div>
 
                     <div class="dashboard-item" v-if="docs.length > 0">

@@ -12,6 +12,7 @@
                         <tr>
                             <th>#</th>
                             <th>Команда</th>
+                            <th>Состав</th>
                             <th v-for="i in Object.keys(group[0]).length - 1">
                                 #{{i}}
                             </th>
@@ -24,6 +25,13 @@
                             <td>
                                 <div class="result-table__name">
                                     {{team[0].name}}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="result-table__name">
+                                    <div class="result-table__second" v-if="teamUsers">
+                                        <span v-for="user in teamUsers.find(e=>e.team_id === team[0].id).users" :key="user.id">{{user.surname}} {{user.name}} {{user.patronymic}}</span>
+                                    </div>
                                 </div>
                             </td>
                             <td v-for="race in team">
@@ -50,11 +58,21 @@ const statusTitle = {
     'group': 'Группа',
     'fleet': 'Флот',
 };
+const teamUsers = ref(null);
 
 onMounted(async () => {
     try {
         const response = await axios.get(`/api/stage/${props.id}`);
         results.value = response.data;
+    } catch (e) {
+        console.log(e.message);
+    }
+
+    try {
+        const ans = await axios.get(`/api/team/users/${props.id}`);
+        if(ans.data.result) {
+            teamUsers.value = ans.data.teams;
+        }
     } catch (e) {
         console.log(e.message);
     }
@@ -75,5 +93,8 @@ const printValue = (race, sum, group) => {
 <style scoped>
 .result-table__item {
     margin-top: 30px;
+}
+.result-table__second {
+    text-align: left;
 }
 </style>

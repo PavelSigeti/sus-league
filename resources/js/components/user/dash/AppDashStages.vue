@@ -10,6 +10,7 @@
             <span>Начало регистрации: {{time(stage.register_start)}}</span>
             <span>Окончание регистрации: {{time(stage.register_end)}}</span>
         </div>
+        <div v-if="stage.excerpt" class="user-stage__excerpt content" v-html="stage.excerpt"></div>
         <div class="btn btn-disable btn-settings-280" v-if="new Date(stage.register_start) > now">
             Регистрация не началась
         </div>

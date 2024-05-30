@@ -53,12 +53,12 @@ header {
     margin-top: 30px;
 }
 .logo {
-    width: 96px;
+    width: 240px;
     height: 30px;
 }
 .homepage-link {
     width: auto;
-    height: 30px;
+    height: 40px;
 }
 .btn {
     background-color: rgba(255, 255, 255, 0);
@@ -704,9 +704,9 @@ h1 {
     position: absolute;
 }
 .user-stage__excerpt {
-    font-size: 1.1em;
+    margin-top: 10px;
+    font-size: .9em;
     line-height: 110%;
-    margin-bottom: 15px;
 }
 .user-stage__date {
     margin-bottom: 25px;

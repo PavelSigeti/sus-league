@@ -1,20 +1,22 @@
 <template>
-    <div class="team-invites" v-if="invites.length > 0">
-        <h3>Приглашения в команду</h3>
-        <div
-            class="team-invite__item"
-            v-for="(invite, idx) in invites"
-            :key="invite.id"
-        >
-            <div class="team-invite__item-name">
-                Команда: <span class="b500">{{invite.name}}</span>
-            </div>
-            <div class="team-invite__buttons">
-                <div class="btn btn-default btn-team btn-accept" @click="acceptInvite(invite.id)" title="Принять">
-                    <i class="ri-check-line"></i>
+    <div class="dashboard-item"  v-if="invites.length > 0">
+        <div class="team-invites">
+            <h3>Приглашения в команду</h3>
+            <div
+                class="team-invite__item"
+                v-for="(invite, idx) in invites"
+                :key="invite.id"
+            >
+                <div class="team-invite__item-name">
+                    Команда: <span class="b500">{{invite.name}}</span>
                 </div>
-                <div class="btn btn-border btn-team btn-cancel" @click="rejectInvite(invite.id, idx)" title="Отказаться">
-                    <i class="ri-close-line"></i>
+                <div class="team-invite__buttons">
+                    <div class="btn btn-default btn-team btn-accept" @click="acceptInvite(invite.id)" title="Принять">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="btn btn-border btn-team btn-cancel" @click="rejectInvite(invite.id, idx)" title="Отказаться">
+                        <i class="ri-close-line"></i>
+                    </div>
                 </div>
             </div>
         </div>

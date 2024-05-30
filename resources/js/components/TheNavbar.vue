@@ -5,29 +5,29 @@
         <li class="menu-item"><router-link :to="{name: 'rating'}"><img src="@/static/menu/result.svg" alt=""><span>Рейтинг</span></router-link></li>
         <li class="menu-item"><router-link to="/dashboard/page/reglament"><img src="@/static/menu/rules.svg" alt="ЛК"><span>Регламент</span></router-link></li>
         <li class="menu-item"><router-link to="/dashboard/page/info"><img src="@/static/menu/about.svg" alt="ЛК"><span>Инструкция</span></router-link></li>
+        <li class="menu-item"><router-link to="/dashboard/settings"><div class="gear-navbar"><i class="ri-settings-2-line"></i></div><span>Настройки</span></router-link></li>
     </ul>
     <TheAdminNavbar v-if="admin" />
 
 </template>
 
-<script>
+<script setup>
 import { useStore } from 'vuex';
 import '@/utils/remixicon/remixicon.css';
 import TheAdminNavbar from '@/components/admin/TheAdminNavbar.vue';
 
-export default {
-    name: "TheNavbar",
-    components: {
-        TheAdminNavbar,
-    },
-    setup() {
-        const store = useStore();
-
-        const admin = store.getters['auth/user'].role === 'admin';
-
-        return {
-             admin,
-        }
-    }
-}
+const store = useStore();
+const admin = store.getters['auth/user'].role === 'admin';
 </script>
+
+<style scoped>
+.gear-navbar {
+    font-size: 30px;
+    margin-right: 10px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+</style>

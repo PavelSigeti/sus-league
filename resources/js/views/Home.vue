@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row aic">
                 <div class="col-6">
-                    <router-link to="/"><img src="@/static/logo.svg" alt="sus logo" class="logo"></router-link>
+                    <router-link class="header-link" to="/"><img src="@/static/logo.svg" alt="sus logo" class="logo"></router-link>
                 </div>
                 <div class="col-6 jcfe">
                     <div class="login-btn btn btn-border" @click="login = true">Вход</div>
@@ -25,7 +25,7 @@
                 <div class="col-12 df">
                     <div class="home-container">
                         <div class="home-main">
-                            <h1>Добро пожаловать<br> на Кубок ИТМО<br> по парусному спорту</h1>
+                            <h1>Добро пожаловать на <br>SUS LEAGUE: SEASON ONE</h1>
                             <div class="btn btn-default" @click="register = true">Принять участие</div>
                         </div>
                         <div class="home-links">
@@ -41,41 +41,34 @@
     </main>
 </template>
 
-<script>
+<script setup>
 import {ref} from 'vue';
 import AppLoginForm from "../components/public/AppLoginForm.vue";
 import AppRegisterForm from "../components/public/AppRegisterForm.vue";
 import AppForgetPassword from "../components/public/AppForgetPassword.vue";
 import AppHomeHeader from "../components/ui/AppHomeHeader.vue";
 
-export default {
-    name: "Home",
-    components: {
-        AppLoginForm, AppRegisterForm, AppForgetPassword,
-        AppHomeHeader,
-    },
-    setup() {
-        const login = ref(false);
-        const register = ref(false);
-        const forget = ref(false);
 
-        const changeModal = () => {
-            login.value = !login.value;
-            register.value = !register.value;
-        };
-        const toggleForget = () => {
-            login.value = !login.value;
-            forget.value = !forget.value;
-        };
+const login = ref(false);
+const register = ref(false);
+const forget = ref(false);
 
-        return {
-            login, register, changeModal,
-            forget, toggleForget,
-        }
-    }
-}
+const changeModal = () => {
+    login.value = !login.value;
+    register.value = !register.value;
+};
+const toggleForget = () => {
+    login.value = !login.value;
+    forget.value = !forget.value;
+};
 </script>
 
 <style scoped>
-
+.header-link {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 50px;
+    width: fit-content;
+}
 </style>

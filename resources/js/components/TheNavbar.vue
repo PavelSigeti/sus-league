@@ -22,10 +22,10 @@ const admin = store.getters['auth/user'].role === 'admin';
 
 <style scoped>
 .gear-navbar {
-    font-size: 30px;
+    font-size: 28px;
     margin-right: 10px;
-    width: 38px;
-    height: 38px;
+    width: 32px;
+    height: 32px;
     display: flex;
     justify-content: center;
     align-items: center;

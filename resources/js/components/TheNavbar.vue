@@ -5,7 +5,7 @@
         <li class="menu-item"><router-link :to="{name: 'rating'}"><img src="@/static/menu/result.svg" alt=""><span>Рейтинг</span></router-link></li>
         <li class="menu-item"><router-link to="/dashboard/page/reglament"><img src="@/static/menu/rules.svg" alt="ЛК"><span>Регламент</span></router-link></li>
         <li class="menu-item"><router-link to="/dashboard/page/info"><img src="@/static/menu/about.svg" alt="ЛК"><span>Инструкция</span></router-link></li>
-        <li class="menu-item"><router-link to="/dashboard/settings"><div class="gear-navbar"><i class="ri-settings-2-line"></i></div><span>Настройки</span></router-link></li>
+        <li class="menu-item"><router-link to="/dashboard/settings"><img src="@/static/menu/settings.svg" alt="ЛК"><span>Настройки</span></router-link></li>
     </ul>
     <TheAdminNavbar v-if="admin" />
 
@@ -21,13 +21,5 @@ const admin = store.getters['auth/user'].role === 'admin';
 </script>
 
 <style scoped>
-.gear-navbar {
-    font-size: 28px;
-    margin-right: 10px;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
 </style>

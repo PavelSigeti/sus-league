@@ -35,13 +35,15 @@ class CreateNewUser implements CreatesNewUsers
             ],
             'password' => $this->passwordRules(),
         ])->validate();
+        
+        $university_id = $input['university_id'] ? $input['university_id'] : null;
 
         return User::query()->create([
             'name' => $input['name'],
             'surname' => $input['surname'],
             'patronymic' => $input['patronymic'],
             'birth' => $input['birth'],
-            'university_id' => $input['university_id'],
+            'university_id' => $university_id,
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
         ]);

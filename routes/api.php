@@ -110,6 +110,12 @@ Route::group(['middleware' => ['auth:sanctum',  'admin' ]], function () {
     Route::get('/admin/stage/{id}/files', [\App\Http\Controllers\Admin\StageFileController::class, 'getStageFiles']);
     Route::post('/admin/stage/file', [\App\Http\Controllers\Admin\StageFileController::class, 'store']);
     Route::delete('/admin/stage/file/{id}/delete', [\App\Http\Controllers\Admin\StageFileController::class, 'destroy']);
+
+    Route::get('/admin/users', [\App\Http\Controllers\Admin\UserController::class, 'index']);
+    Route::get('/admin/user/{id}', [\App\Http\Controllers\Admin\UserController::class, 'show']);
+    Route::post('/admin/user/{id}/file', [\App\Http\Controllers\Admin\UserController::class, 'fileUpload']);
+    Route::get('/admin/user/{id}/docs', [\App\Http\Controllers\Admin\UserController::class, 'fileDocs']);
+    Route::delete('/admin/user/{id}/file/{type}', [\App\Http\Controllers\Admin\UserController::class, 'fileDestroy']);
 });
 
 

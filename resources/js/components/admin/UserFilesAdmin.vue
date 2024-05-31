@@ -1,22 +1,23 @@
 <template>
-<div class="col-12">
-    <div class="dashboard-item">
-        <h3>Документы</h3>
-        <div class="file-container" v-if="files">
-            <UserSpecificFile
-                v-for="document in documentOptions"
-                :document="document"
-                :file="files.find(e=>e.type === document.type)"
-                :key="document.type"
-            />
+    <div class="col-12">
+        <div class="dashboard-item">
+            <h3>Документы</h3>
+            <div class="file-container" v-if="files">
+                <UserSpecificFileAdmin
+                    v-for="document in documentOptions"
+                    :document="document"
+                    :file="files.find(e=>e.type === document.type)"
+                    :key="document.type"
+                />
+            </div>
         </div>
     </div>
-</div>
 </template>
 
 <script setup>
 import {onMounted, ref} from "vue";
-import UserSpecificFile from "@/components/user/UserSpecificFile.vue";
+import {useRoute} from "vue-router";
+import UserSpecificFileAdmin from "@/components/admin/UserSpecificFileAdmin.vue";
 
 const documentOptions = ref([
     {'type': 'studak', 'title': 'Студенческий/Диплом'},
@@ -32,8 +33,10 @@ const documentOptions = ref([
 ]);
 const files = ref(null);
 
+const route = useRoute();
+
 onMounted(async () => {
-    const response = await axios.get('/api/user/docs');
+    const response = await axios.get(`/api/admin/user/${route.params.id}/docs`);
     files.value = response.data.files;
 });
 

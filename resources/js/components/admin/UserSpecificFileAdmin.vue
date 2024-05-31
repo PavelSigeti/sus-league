@@ -43,6 +43,7 @@
 import {ref} from 'vue';
 import {useStore} from "vuex";
 import statusText from "@/utils/statusText";
+import {useRoute} from "vue-router";
 
 const store = useStore();
 const props = defineProps(['document', 'file']);
@@ -50,6 +51,8 @@ const props = defineProps(['document', 'file']);
 const path = ref(props.file ? '/storage' + props.file.path : null);
 const status = ref(statusText(props.file ? props.file.status : null));
 const docs = ref(props.file ? props.file : null);
+
+const route = useRoute();
 
 const error = ref();
 const open = ref(false);
@@ -84,14 +87,14 @@ const handleFileUpload = async (event) => {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('type', props.document.type);
-        const ans = await axios.post('/api/user/file', formData, {
-            headers: { "Content-Type": "multipart/form-data" },
+        const ans = await axios.post(`/api/admin/user/${route.params.id}/file`, formData, {
+            headers: {"Content-Type": "multipart/form-data"},
         });
         url.value = null;
         path.value = '/storage' + ans.data.file.path;
         status.value = statusText('edit');
         docs.value = ans.data.file;
-    } catch(e) {
+    } catch (e) {
         console.log(e.message);
         error.value = 'Ошибка при загрузке файлов';
         url.value = null;
@@ -100,8 +103,8 @@ const handleFileUpload = async (event) => {
 
 const remove = async () => {
     try {
-        const ans = await axios.delete(`/api/user/file/${props.document.type}`);
-        if(ans.data.result === true) {
+        const ans = await axios.delete(`/api/admin/user/${route.params.id}/file/${props.document.type}`);
+        if (ans.data.result === true) {
             status.value = statusText(null);
             path.value = null;
         } else {
@@ -127,18 +130,22 @@ const remove = async () => {
     justify-content: center;
     align-items: center;
     position: relative;
+
     img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
+
     a {
         color: #242424;
     }
+
     .ri-file-pdf-2-line {
         font-size: 5em;
     }
 }
+
 .remove-img {
     width: 36px;
     height: 36px;
@@ -152,20 +159,24 @@ const remove = async () => {
     top: 15px;
     right: 15px;
     cursor: pointer;
+
     &:hover {
         box-shadow: inset 0px 0px 0px 2px #fff;
     }
 }
+
 .single-img {
     .filepond--wrapper {
         max-width: 300px;
         width: 100%;
+
         .filepond--credits {
             visibility: hidden;
         }
     }
 
 }
+
 .imagePreviewWrapper {
     height: 200px;
     width: 250px;
@@ -175,14 +186,16 @@ const remove = async () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    border:1px solid #ccc;
+    border: 1px solid #ccc;
     box-sizing: border-box;
+
     i {
         animation: spin 1s infinite linear;
         font-size: 48px;
         color: #242424;
     }
 }
+
 .file-upload-label {
     display: flex;
     background-color: #ededed;
@@ -192,6 +205,7 @@ const remove = async () => {
     justify-content: center;
     align-items: center;
 }
+
 .file-upload-label__select {
     width: 250px;
     height: 200px;
@@ -201,48 +215,58 @@ const remove = async () => {
     flex-direction: column;
     color: #222;
     cursor: pointer;
+
     i {
         font-size: 28px;
     }
 }
+
 .file-input-hide {
     display: none;
 }
+
 h4 {
     font-weight: 500;
     margin-bottom: 15px;
     font-size: 1.1em;
 }
+
 .file-upload {
     padding: 15px;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,.15);
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .15);
     border-radius: 10px;
     height: fit-content;
 }
+
 .file-status {
     margin-top: 10px;
 }
+
 .upload-container {
     height: 0;
     overflow: hidden;
     transition: .3s;
-    box-shadow: 0px 0px 5px 0px rgba(0,0,0, .15);
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .15);
     border-radius: 10px;
 }
+
 .upload-container__show {
     height: 200px;
     max-height: fit-content;
 }
+
 h4 {
     cursor: pointer;
     user-select: none;
+
     &:hover {
         text-decoration: underline;
     }
 }
+
 @keyframes spin {
     from {
-       transform: rotate(0deg);
+        transform: rotate(0deg);
     }
     to {
         transform: rotate(360deg);

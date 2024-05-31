@@ -18,16 +18,19 @@
                             <div class="file-item__4">Отказ</div>
                         </div>
                         <div class="file-item" v-for="file in files" :key="file.id">
-                            <div class="file-item__1"><div class="file-id">{{file.id}}</div></div>
+                            <div class="file-item__1">
+                                <div class="file-id">{{file.id}}</div>
+                            </div>
                             <div class="file-item__2">
                                 <a :href="'/storage/' + file.path" target="_blank">
                                     <i class="ri-file-pdf-2-line" v-if="file.path.includes('pdf')"></i>
                                     <img :src="'/storage/' + file.path" alt="img" v-else>
                                 </a>
+                                {{file.type}}
                             </div>
                             <div class="file-item__3">
                                 <div class="file-user">
-                                    <div class="file-user__top">{{file.user.surname}} {{file.user.name}}</div>
+                                    <router-link target="_blank" :to="`/admin/user/${file.user.id}`" class="file-user__top">{{file.user.surname}} {{file.user.name}}</router-link>
                                     <div class="file-user__bottom">{{file.user.email}}</div>
                                 </div>
                             </div>
@@ -91,5 +94,11 @@ const cancel = async (id) => {
 
 .df {
     gap: 10px;
+}
+.file-user__top {
+    font-size: 1em;
+    height: fit-content;
+    justify-content: flex-start;
+    width: fit-content;
 }
 </style>

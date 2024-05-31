@@ -11,7 +11,7 @@ class FileController extends Controller
 {
     public function show($status)
     {
-        $files = UserFile::query()->where('status', $status)->with('user')->get();
+        $files = UserFile::query()->where('status', $status)->with('user')->orderBy('user_id')->get();
 
         return [
             'result' => true,
@@ -42,7 +42,7 @@ class FileController extends Controller
     public function destroy($id)
     {
         $file = UserFile::query()->find($id);
-        
+
         if($file) {
             Storage::disk('public')->delete($file->path);
             $file->delete();

@@ -152,6 +152,24 @@ export default [
         }
     },
     {
+        path: '/admin/user/:id',
+        name: 'admin.user',
+        component: () => import('../views/admin/users/user.vue'),
+        meta: {
+            layout: 'Admin',
+            auth: true,
+        }
+    },
+    {
+        path: '/admin/users',
+        name: 'admin.users',
+        component: () => import('../views/admin/users/index.vue'),
+        meta: {
+            layout: 'Admin',
+            auth: true,
+        }
+    },
+    {
         path: '/dashboard/settings',
         name: 'user.settings',
         component: () => import('../views/user/Settings.vue'),

@@ -35,7 +35,7 @@
     </main>
 </template>
 
-<script>
+<script setup>
 import {onMounted, ref} from 'vue';
 import {useStore} from 'vuex';
 import { useForm, Field, ErrorMessage } from 'vee-validate';
@@ -47,63 +47,48 @@ import AppHeader from "@/components/ui/AppHeader.vue";
 import axios from "axios";
 import UserFiles from "@/components/user/UserFiles.vue";
 
-export default {
-    name: "Settings",
-    components: {
-        UserFiles,
-        AppHeader, AppLoader, vSelect,
-        Field, ErrorMessage,
-    },
-    setup() {
-        const store = useStore();
-        const user = ref(store.getters['auth/user']);
-        const loading = ref(false);
+const store = useStore();
+const user = ref(store.getters['auth/user']);
+const loading = ref(false);
 
-        const universities = ref();
+const universities = ref();
 
-        const schema = yup.object({
-            university_id: yup.object().nullable(),
-        });
+const schema = yup.object({
+    university_id: yup.object().nullable(),
+});
 
-        const { values, handleSubmit } = useForm({
-            validationSchema: schema,
-        });
+const { values, handleSubmit } = useForm({
+    validationSchema: schema,
+});
 
-        onMounted(async () => {
-            loading.value = true;
-            try {
-                const response = await axios.get('/api/user-settings');
-                user.value.email = response.data.email;
-                user.value.university = response.data.university;
+onMounted(async () => {
+    loading.value = true;
+    try {
+        const response = await axios.get('/api/user-settings');
+        user.value.email = response.data.email;
+        user.value.university = response.data.university;
 
-                const universitiesResponse = await axios.get('/api/universities');
-                universities.value = universitiesResponse.data;
+        const universitiesResponse = await axios.get('/api/universities');
+        universities.value = universitiesResponse.data;
 
-            } catch (e) {
-                console.log(e.message);
-            }
-            loading.value = false;
-        });
-
-        const submit = handleSubmit(async (values) => {
-            loading.value = true;
-            values.university_id = values.university_id ? values.university_id.code : null;
-            try {
-                await axios.patch('/api/user/update', values);
-                user.value.university = universities.value.find(e => e.code === values.university_id).label;
-                store.commit('auth/setUser', user.value);
-            } catch (e) {
-                console.log(e.message);
-            }
-            loading.value = false;
-        });
-
-        return {
-            loading, user, universities,
-            submit,
-        };
+    } catch (e) {
+        console.log(e.message);
     }
-}
+    loading.value = false;
+});
+
+const submit = handleSubmit(async (values) => {
+    loading.value = true;
+    values.university_id = values.university_id ? values.university_id.code : null;
+    try {
+        await axios.patch('/api/user/update', values);
+        user.value.university = universities.value.find(e => e.code === values.university_id).label;
+        store.commit('auth/setUser', user.value);
+    } catch (e) {
+        console.log(e.message);
+    }
+    loading.value = false;
+});
 </script>
 
 <style scoped>

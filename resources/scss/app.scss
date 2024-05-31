@@ -1179,7 +1179,7 @@ body .vue3-progress-bar-container .vue3-progress-bar {
     a {
         font-size: 2em;
         display: flex;
-        width: 150px;
+        width: 120px;
         height: 70px;
         justify-content: center;
         align-items: center;
@@ -1188,10 +1188,13 @@ body .vue3-progress-bar-container .vue3-progress-bar {
     }
 }
 .file-item__2 {
-    border-radius: 10px;
+    border-radius: 5px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 120px;
     img {
-        width: 150px;
+        width: 120px;
         height: 70px;
         object-fit: cover;
         border: 2px solid #ccc;

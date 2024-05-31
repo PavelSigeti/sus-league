@@ -59,7 +59,7 @@
             </div>
             <div class="form-control">
                 <Field name="birth" v-slot="{ field, errors }">
-                    <input v-bind="field" :type="dateInit ? 'date' : 'text'" @focus="dateInit=true" :class="['form-input', {'invalid': !!errors.length} ]" placeholder="Дата рождения"  />
+                    <input v-bind="field" :type="dateInit ? 'date' : 'text'" @focus="dateInit=true" :class="['form-input', {'invalid': !!errors.length}, 'form-date' ]" placeholder="Дата рождения"  />
                 </Field>
                 <ErrorMessage class="alert" name="birth" />
             </div>
@@ -156,5 +156,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+.form-date {
+    width: 100%;
+    box-sizing: border-box;
+}
 </style>

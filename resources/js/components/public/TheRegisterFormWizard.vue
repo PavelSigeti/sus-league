@@ -68,7 +68,9 @@
                     <v-select
                         :options="universities"
                         placeholder="Выберите университет"
-                        v-bind="field">
+                        v-bind="field"
+                        v-model="university_id"
+                    >
                     </v-select>
                     <ErrorMessage class="alert" name="university_id" />
                 </Field>
@@ -100,11 +102,13 @@ export default {
     components: {
         vSelect, Field, ErrorMessage,
     },
+
     setup(props, {emit}) {
         const store = useStore();
         const step = ref(0);
         const {universities, getUniversities} = useUniversities();
         const dateInit = ref(false);
+        const university_id = ref(null);
 
         onMounted(async ()=>{
             getUniversities();
@@ -143,13 +147,13 @@ export default {
                 }
 
             }
-
+            values.university_id = university_id.value;
             emit('submitForm', values);
         });
 
         return {
             submit, step, universities,
-            dateInit,
+            dateInit, university_id,
         }
     }
 }

@@ -37,7 +37,15 @@ class UserController extends Controller
         return $result;
     }
 
+    public function getProfile($id)
+    {
+        return $this->userRepository->getProfile($id);
+    }
 
+    public function getStatistics($id)
+    {
+        return $this->userRepository->getStatistics($id);
+    }
 
     public function settings()
     {

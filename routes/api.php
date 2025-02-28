@@ -127,6 +127,9 @@ Route::group([], function () {
     Route::get('/rating/university', [\App\Http\Controllers\Guest\RatingController::class, 'universityRating']);
     Route::get('/rating/team', [\App\Http\Controllers\Guest\RatingController::class, 'teamRating']);
 
+    Route::get('/users/{id}', [\App\Http\Controllers\User\UserController::class, 'getProfile']);
+    Route::get('/users/{id}/statistics', [\App\Http\Controllers\User\UserController::class, 'getStatistics']);
+
     Route::get('/home/stage/ended',[\App\Http\Controllers\Guest\StageController::class, 'getEnded']);
     Route::get('/home/stage/actual',[\App\Http\Controllers\Guest\StageController::class, 'getActual']);
 

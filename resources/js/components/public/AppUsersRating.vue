@@ -2,14 +2,13 @@
     <div class="dashboard-item" v-if="data">
         <AppLoader v-if="loading" />
         <h3>Личный зачет</h3>
-        <div class="rating-item" v-for="(item, idx) in data.data" :key="item.user_id">
+        <router-link :to="`/dashboard/users/${item.user_id}`" class="rating-item" v-for="(item, idx) in data.data" :key="item.user_id">
             <div class="rating-position">#{{idx+1}}</div>
-            <div class="rating-title">
-                <div class="rating-name">{{item.surname}} {{item.name}} {{item.patronymic}}</div>
-
-            </div>
+                <div  class="rating-name">
+                    {{item.surname}} {{item.name}} {{item.patronymic}}
+                </div>
             <div class="rating-score">{{item.total}}</div>
-        </div>
+        </router-link>
         <div class="jcc">
             <div class="btn btn-default btn-settings-280 mt10"
                  v-if="data.current_page < data.last_page"

@@ -224,15 +224,6 @@ export default [
             auth: true,
         }
     },
-    {
-        path: '/dashboard/users/:id',
-        name: 'user.profile',
-        component: () => import('../views/UserProfile.vue'),
-        meta: {
-            layout: 'Auth',
-            auth: true,
-        }
-    },
 
     {
         path: '/page/:slug',

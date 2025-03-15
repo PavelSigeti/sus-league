@@ -25,49 +25,15 @@ const route = useRoute();
 const stages = ref([]);
 const isLoading = ref(true);
 
-const fetchMockData = async () => {
-    setTimeout(() => {
-        // Замоканные данные
-        stages.value = [
-            {
-                id: 1,
-                title: "Первый этап MX700",
-                tournament: "Турнир MX700",
-                date: "07.11.2022",
-                result: "5 место",
-                participants: 36
-            },
-            {
-                id: 2,
-                title: "Второй этап MX700",
-                tournament: "Турнир MX700",
-                date: "14.11.2022",
-                result: "2 место",
-                participants: 40
-            },
-            {
-                id: 1,
-                title: "Первый этап MX700",
-                tournament: "Турнир MX700",
-                date: "07.11.2022",
-                result: "5 место",
-                participants: 36
-            },
-            {
-                id: 2,
-                title: "Второй этап MX700",
-                tournament: "Турнир MX700",
-                date: "14.11.2022",
-                result: "2 место",
-                participants: 40
-            }
-        ];
-        isLoading.value = false;
-    }, 1500);
-};
-
 onMounted(async () => {
-    fetchMockData();
+    try {
+        const response = await axios.get(`/api/user/${route.params.id}/stages`);
+        stages.value = response.data;
+    } catch (error) {
+        console.error("Ошибка загрузки соревнований:", error);
+    } finally {
+        isLoading.value = false;
+    }
 });
 </script>
 

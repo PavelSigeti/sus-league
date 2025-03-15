@@ -4,35 +4,38 @@
         <template v-if="isLoading">
             <AppLoader :isSectionLoader="true"/>
         </template>
-            <div v-if="!isLoading" class="grid-section">
-                <div v-for="section in ratingSections" :key="section.key" class="grid-item">
-                    
-                    <div class="info-item__container">
-                        <h4 class="section-name">{{ section.title }}</h4>
-                        <template v-if="error[section.key]">
-                            <p >{{ error[section.key] }}</p>
-                        </template>
-                        <template v-else-if="ratings[section.key]?.length">
-                            <div v-for="(item) in ratings[section.key]" :key="item.name">
-                                <div class="info-item__row">
-                                    <span v-if="item.name" class="info-item__label">{{ item.name }}</span>
-                                    <span class="info-item__dots"></span>
-                                    <span v-if="item.score" class="info-item__value">{{ item.score }}</span>
-                                </div>
+        <div v-if="!isLoading" class="grid-section">
+            <div v-for="section in ratingSections" :key="section.key" class="grid-item">
+                <div class="info-item__container">
+                    <h4 class="section-name">{{ section.title }}</h4>
+                    <template v-if="error[section.key]">
+                        <p>{{ error[section.key] }}</p>
+                    </template>
+                    <template v-else-if="ratings[section.key]?.length">
+                        <div v-for="(item) in ratings[section.key]" :key="item.name">
+                            <div class="info-item__row">
+                                <span v-if="item.name" class="info-item__label">{{ item.name }}</span>
+                                <span class="info-item__dots"></span>
+                                <span v-if="item.score" class="info-item__value">{{ item.score }}</span>
                             </div>
-                        </template>
-                        <template v-else>
-                            <p class="empty-text">Нет данных</p>
-                        </template>
-                    </div>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <p class="empty-text">Нет данных</p>
+                    </template>
                 </div>
             </div>
+        </div>
     </div>
 </template>
 
 <script setup>
 import AppLoader from "../ui/AppLoader.vue";
 import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import axios from 'axios';
+
+const route = useRoute();
 
 const ratingSections = ref([
     { key: "statistics", title: "Статистика" },
@@ -41,53 +44,42 @@ const ratingSections = ref([
     { key: "university", title: "Университетский зачет" }
 ]);
 
-// Тестовые данные
-const mockData = {
-    statistics: [
-        { name: "Всего гонок", score: 10 },
-        { name: "Среднее место в гонке", score: 4.5 },
-        { name: "Выигранных гонок", score: 3 },
-        { name: "Всего регат", score: 2 }
-    ],
-    personal: [
-        { name: "1. Phew", score: 1201 },
-        { name: "2. Waprion", score: 1105 },
-        { },
-        { name: "102. Applee", score: 10 }
-    ],
-    team: [
-        { name: "1. Red Storm", score: 3200 },
-        { name: "2. Blue Waves", score: 2890 },
-        { },
-        { name: "50. Green Sail", score: 1450 }
-    ],
-    university: [
-        { name: "1. MIT", score: 5100 },
-        { name: "2. Harvard", score: 4800 },
-        { },
-        { name: "30. Yale", score: 2500 }
-    ]
-};
-
-const ratings = ref({});
-const error = ref({});
+const ratings = ref({
+    statistics: [],
+    personal: [],
+    team: [],
+    university: []
+});
+const error = ref({
+    statistics: null,
+    personal: null,
+    team: null,
+    university: null
+});
 const isLoading = ref(true);
 
-const fetchMockData = () => {
-    setTimeout(() => {
-        ratingSections.value.forEach((section) => {
-            if (Math.random() < 0.1) {
-                error.value[section.key] = "Ошибка загрузки данных";
-            } else {
-                ratings.value[section.key] = mockData[section.key] || [];
-            }
-        });
+onMounted( async () => {
+    try {
+        const [statisticsResponse, personalResponse, teamResponse, universityResponse] = await Promise.all([
+            axios.get(`/api/user/${route.params.id}/rating`),
+            axios.get(`/api/user/${route.params.id}/rating/personal`),
+            axios.get(`/api/user/${route.params.id}/rating/team`),
+            axios.get(`/api/user/${route.params.id}/rating/university`)
+        ]);
+        ratings.value.statistics = statisticsResponse.data || [];
+        ratings.value.personal = personalResponse.data || [];
+        ratings.value.team = teamResponse.data || [];
+        ratings.value.university = universityResponse.data || [];
+        console.log(ratings.value)
+    } catch (err) {
+        console.error(err);
+        error.value.statistics = "Ошибка загрузки данных для статистики";
+        error.value.personal = "Ошибка загрузки данных для личного зачета";
+        error.value.team = "Ошибка загрузки данных для командного зачета";
+        error.value.university = "Ошибка загрузки данных для университетского зачета";
+    } finally {
         isLoading.value = false;
-    }, 1000 + Math.random() * 2000);
-};
-
-onMounted(() => {
-    fetchMockData();
+    }
 });
 </script>
 
@@ -98,8 +90,9 @@ onMounted(() => {
 
 .info-item__container {
     min-height: 114px;
+    max-height: 160px;
+    overflow: hidden;
 }
-
 
 .grid-section {
     display: grid;

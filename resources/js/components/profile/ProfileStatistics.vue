@@ -39,13 +39,8 @@ const isLoading = ref(true);
 
 onMounted(async () => {
     try {
-        // Имитация задержки
-        setTimeout(async () => {
-            const response = await axios.get(`/api/users/${route.params.id}/statistics`);
-            statistics.value = response.data;
-            console.log(statistics.value);
-            isLoading.value = false;
-        }, 2000);
+        const response = await axios.get(`/api/user/${route.params.id}/statistics`);
+        statistics.value = response.data;ƒ
     } catch (error) {
         console.error("Ошибка при загрузке статистики:", error);
         isLoading.value = false;

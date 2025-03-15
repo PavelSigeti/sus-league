@@ -46,6 +46,16 @@ class UserController extends Controller
     {
         return $this->userRepository->getStatistics($id);
     }
+    
+    public function getRating($id)
+    {
+        return $this->userRepository->getRating($id);
+    }
+
+    public function getStages($id)
+    {
+        return $this->userRepository->getStages($id);
+    }
 
     public function settings()
     {

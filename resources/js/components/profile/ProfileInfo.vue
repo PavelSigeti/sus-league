@@ -32,22 +32,16 @@ const userFields = ref([
     { key: "name", title: "Имя" },
     { key: "surname", title: "Фамилия" },
     { key: "patronymic", title: "Отчество" },
-    { key: "university", title: "Университет" },
     { key: "age", title: "Возраст" },
+    { key: "university", title: "Университет" },
     { key: "registration_date", title: "Дата регистрации" },
 ]);
 
 onMounted(async () => {
     try {
-        setTimeout(async () => {
-            const response = await axios.get(`/api/users/${route.params.id}`);
-            user.value = response.data;
-            console.log(user.value)
-            isLoading.value = false;
-        }, 2000); // Имитация задержки 2 секунды
-        // const response = await axios.get(`/api/users/${route.params.id}`);
-        // user.value = response.data;
-        // isLoading.value = false;
+        const response = await axios.get(`/api/user/${route.params.id}`);
+        user.value = response.data;
+        isLoading.value = false;
     } catch (error) {
         console.error("Ошибка при загрузке данных:", error);
         isLoading.value = false;

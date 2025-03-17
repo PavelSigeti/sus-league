@@ -8,18 +8,32 @@
         <div class="list-item__result-row">
             Количество команд: {{ stage.participants }}
         </div>
-        <button class="btn btn-border btn-settings-280 mt10">Подробнее</button>
+        <button 
+            class="btn btn-border btn-settings-280 mt10"
+            @click="goToStage"
+        >
+            Подробнее
+        </button>
     </div>
 </template>
 
 <script setup>
-defineProps({
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const props = defineProps({
     stage: {
         type: Object,
         required: true
     }
 });
+
+const goToStage = () => {
+    router.push(`/dashboard/stage/${props.stage.id}`);
+};
 </script>
+
 
 <style scoped>
 .stage-list__item {

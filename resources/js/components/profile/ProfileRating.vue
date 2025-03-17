@@ -1,6 +1,6 @@
 <template>
     <div class="dashboard-item">
-        <h3 class="block-label">Рейтинг</h3>
+        <h3 class="block-label">Рейтинг <div class="block-subtitle">сезон 2023/24</div></h3>
 
         <template v-if="isLoading">
             <AppLoader :isSectionLoader="true"/>
@@ -8,7 +8,7 @@
 
         <div v-else class="grid-section">
             <div v-for="section in ratingSections" :key="section.key" class="grid-item">
-                <div class="info-item__container">
+                    <div :class="['info-item__container', { 'statistics-container': section.key === 'statistics' }]">
                     <h4 class="section-name">{{ section.title }}</h4>
 
                     <template v-if="errors[section.key]">
@@ -36,12 +36,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import AppLoader from "../ui/AppLoader.vue";
 import axios from "axios";
 
 const route = useRoute();
+const router = useRouter();
 
 const ratingSections = ref([
     { key: "statistics", title: "Статистика", url: `/api/user/${route.params.id}/rating` },
@@ -64,10 +65,10 @@ onMounted(async () => {
 
         const results = await Promise.all(requests);
 
-    for (const result of results) {
+        for (const result of results) {
             if (result.error) {
                 errors.value[result.key] = result.error;
-         } else {
+            } else {
                 ratings.value[result.key] = result.data;
             }
         }
@@ -76,12 +77,53 @@ onMounted(async () => {
     } finally {
         isLoading.value = false;
     }
+
+    setTimeout(() => {
+        document.querySelectorAll(".info-item__container:not(.statistics-container)").forEach(el => {
+            el.addEventListener("click", goToRatingPage);
+            el.style.cursor = "pointer";
+        });
+    }, 0);
 });
+
+onBeforeUnmount(() => {
+    document.querySelectorAll(".info-item__container:not(.statistics-container)").forEach(el => {
+        el.removeEventListener("click", goToRatingPage);
+    });
+});
+
+const goToRatingPage = (event) => {
+    const container = event.currentTarget;
+    const sectionKey = container.querySelector(".section-name")?.textContent.trim();
+
+    let sectionParam = "user";
+
+    if (sectionKey.includes("Личный")) {
+        sectionParam = "user";
+    } else if (sectionKey.includes("Командный")) {
+        sectionParam = "team";
+    } else if (sectionKey.includes("Университетский")) {
+        sectionParam = "university";
+    }
+
+    router.push({ path: "/dashboard/rating", query: { section: sectionParam } });
+};
 </script>
 
 <style scoped>
 .dashboard-item {
     min-height: 475px;
+}
+
+.block-label {
+    display: flex;
+    align-items: center;
+}
+
+.block-subtitle {
+    font-size: 16px;
+    font-weight: 400;
+    margin-left: 10px;
 }
 
 .info-item__container {

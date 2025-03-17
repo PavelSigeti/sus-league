@@ -40,6 +40,12 @@ class StageController extends Controller
         return $this->stageRepository->getUserStages($user->id);
     }
 
+
+    public function getStages($id)
+    {
+        return $this->stageRepository->getProfileStages($id);
+    }
+
     public function ended()
     {
         $user = Auth::user();

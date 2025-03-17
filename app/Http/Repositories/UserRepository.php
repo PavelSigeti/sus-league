@@ -204,38 +204,4 @@ class UserRepository extends CoreRepository
     
         return response()->json($data);
     }
-
-    public function getStages($id)
-    {
-        $mockData = [
-            [
-                "id" => 1,
-                "title" => "Первый этап MX700 тест",
-                "tournament" => "Турнир MX700",
-                "date" => "07.11.2022",
-                "result" => "5 место",
-                "participants" => 36
-            ],
-            [
-                "id" => 2,
-                "title" => "Второй этап MX700",
-                "tournament" => "Турнир MX700",
-                "date" => "14.11.2022",
-                "result" => "2 место",
-                "participants" => 40
-            ],
-            [
-                "id" => 3,
-                "title" => "Третий этап MX700",
-                "tournament" => "Турнир MX700",
-                "date" => "21.11.2022",
-                "result" => "1 место",
-                "participants" => 42
-            ]
-        ];
-    
-        return response()->json($mockData);
-    }
-    
-    
 }

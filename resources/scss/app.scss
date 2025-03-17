@@ -114,6 +114,15 @@ h2 {
     margin-top: 0px;
     margin-bottom: 15px;
 }
+
+.second-text {
+    color: #5555;
+    font-weight: 500;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 25px;
+}
+
 .modal {
     position: fixed;
     top: 0;
@@ -479,7 +488,6 @@ h1 {
 
 .info-item__value {
     white-space: nowrap;
-    font-weight: normal;
 }
 
 .btn-full-width {

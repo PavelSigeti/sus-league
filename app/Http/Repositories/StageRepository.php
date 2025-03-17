@@ -3,6 +3,7 @@
 namespace App\Http\Repositories;
 
 use App\Models\Stage as Model;
+use Illuminate\Support\Facades\DB;
 
 class StageRepository extends CoreRepository
 {
@@ -192,7 +193,38 @@ class StageRepository extends CoreRepository
                 $item['users_exists'] = true;
                 return $item;
             });
+        return $result;
+    }
 
+    public function getProfileStages($id)
+    {
+        $columns = [
+            'stages.id', 
+            'stages.title', 
+            'tournaments.title as tournament', 
+            'status', 
+            'stage_user.stage_id',
+            DB::raw("IFNULL(DATE_FORMAT(register_end, '%d.%m.%Y'), 'N/A') as date"),
+            DB::raw("(
+                SELECT COUNT(DISTINCT stage_team.team_id) 
+                FROM stage_team 
+                WHERE stage_team.stage_id = stages.id
+            ) as participants")
+        ];
+    
+        $result = $this->startConditions()
+            ->select($columns)
+            ->join('tournaments', 'stages.tournament_id', '=', 'tournaments.id')
+            ->join('stage_user', 'stages.id', '=', 'stage_user.stage_id')
+            ->where('user_id', $id)
+            ->where('status', 'finished')
+            ->groupBy('stages.id', 'stages.title', 'tournaments.title', 'status', 'stage_user.stage_id')
+            ->get()
+            ->map(function ($item) {
+                $item['users_exists'] = true;
+                return $item;
+            });
+    
         return $result;
     }
 }

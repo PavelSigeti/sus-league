@@ -134,8 +134,8 @@ Route::group([], function () {
     Route::get('/user/{id}', [\App\Http\Controllers\User\UserController::class, 'getProfile']);
     Route::get('/user/{id}/statistics', [\App\Http\Controllers\User\UserController::class, 'getStatistics']);
     Route::get('/user/{id}/rating', [\App\Http\Controllers\User\UserController::class, 'getRating']);
-    Route::get('/user/{id}/stages', [\App\Http\Controllers\User\UserController::class, 'getStages']);
 
+    Route::get('/user/{id}/stages', [\App\Http\Controllers\User\StageController::class, 'getStages']);
 
     Route::get('/home/stage/ended',[\App\Http\Controllers\Guest\StageController::class, 'getEnded']);
     Route::get('/home/stage/actual',[\App\Http\Controllers\Guest\StageController::class, 'getActual']);

@@ -6,7 +6,7 @@
             <div class="list-item__date">Дата проведения: {{ stage.date }}</div>
         </div>
         <div class="list-item__result-row">
-            Результат: <span class="list-item__result">{{ stage.result }}</span> ({{ stage.participants }} участников)
+            Количество команд: {{ stage.participants }}
         </div>
         <button class="btn btn-border btn-settings-280 mt10">Подробнее</button>
     </div>
@@ -35,6 +35,8 @@ defineProps({
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,.15);
     border-radius: 10px;
     height: fit-content;
+    width: 280px;
+    max-width: 280px;
 }
 
 .list-item__info {
@@ -46,6 +48,9 @@ defineProps({
 .list-item__title {
     font-size: 17px;
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;        
+    text-overflow: ellipsis;
 }
 
 .list-item__subtitle {
@@ -64,5 +69,13 @@ defineProps({
 .list-item__result {
     font-size: 16px;
     font-weight: 500;
+}
+
+@media (max-width: 1045px) {
+    .stage-list__item {
+        box-sizing: border-box;
+        width: 100%;
+        max-width: none;
+}
 }
 </style>

@@ -49,8 +49,9 @@ const goToStage = () => {
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,.15);
     border-radius: 10px;
     height: fit-content;
-    width: 280px;
-    max-width: 280px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 500px;
 }
 
 .list-item__info {
@@ -85,11 +86,8 @@ const goToStage = () => {
     font-weight: 500;
 }
 
-@media (max-width: 1045px) {
-    .stage-list__item {
-        box-sizing: border-box;
-        width: 100%;
-        max-width: none;
-}
+.btn {
+    width: 90%;
+    max-width: 300px;
 }
 </style>

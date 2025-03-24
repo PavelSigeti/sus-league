@@ -1,43 +1,52 @@
 <template>
     <div class="dashboard-item">
-        <h3 class="block-label">Рейтинг <div class="block-subtitle">сезон 2023/24</div></h3>
+        <!-- <h3 class="block-label">Рейтинг <div class="block-subtitle">сезон 2023/24</div></h3> -->
+        <h3 class="block-label">Рейтинг <div class="block-subtitle">сезон {{ getCurrentSeason() }}</div></h3>
 
         <template v-if="isLoading">
             <AppLoader :isSectionLoader="true"/>
         </template>
 
-        <div v-else class="grid-section">
-            <div v-for="section in ratingSections" :key="section.key" class="grid-item">
-                    <div :class="['info-item__container', { 'statistics-container': section.key === 'statistics' }]">
-                    <h4 class="section-name">{{ section.title }}</h4>
+        <template v-else>
+            <div v-if="isAllRatingsEmpty" class="empty-section">
+                <p class="second-text">Похоже, сезон еще не начался</p>
+            </div>
+            <div v-else class="grid-section">
+                <div v-for="section in ratingSections" :key="section.key" class="grid-item">
+                    <div :class="['info-item__container', { 'link-container': section.key !== 'statistics' }]">
+                        <h4 class="section-name">{{ section.title }}</h4>
 
-                    <template v-if="errors[section.key]">
-                        <p class="second-text">{{ errors[section.key] }}</p>
-                    </template>
+                        <template v-if="errors[section.key]">
+                            <p class="second-text">{{ errors[section.key] }}</p>
+                        </template>
 
-                    <template v-else-if="ratings[section.key]?.length">
-                        <div v-for="item in ratings[section.key]" :key="item.name" 
-                             :class="{ 'highlight-user': item.is_user }">
-                            <div class="info-item__row">
-                                <span v-if="item.name" class="info-item__label">{{ item.name }}</span>
-                                <span class="info-item__dots"></span>
-                                <span class="info-item__value">{{ item.score }}</span>
+                        <template v-else-if="ratings[section.key]?.length">
+                            <div v-for="item in ratings[section.key]" :key="item.name" 
+                                 :class="{ 'highlight-user': item.is_user }">
+                                <div class="info-item__row">
+                                    <span v-if="item.name" class="info-item__label">{{ item.name }}</span>
+                                    <span class="info-item__dots"></span>
+                                    <span class="info-item__value">{{ item.score }}</span>
+                                </div>
                             </div>
-                        </div>
-                    </template>
+                        </template>
 
-                    <template v-else>
-                        <p class="second-text">Нет данных</p>
-                    </template>
+                        <template v-else>
+                            <div class="empty-section">
+                                <p class="second-text">Нет данных</p>
+                            </div>
+                        </template>
+                    </div>
                 </div>
             </div>
-        </div>
+        </template>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { nextTick } from "vue";
 import AppLoader from "../ui/AppLoader.vue";
 import axios from "axios";
 
@@ -54,6 +63,23 @@ const ratingSections = ref([
 const ratings = ref(Object.create(null));
 const errors = ref(Object.create(null));
 const isLoading = ref(true);
+
+const isAllRatingsEmpty = computed(() => {
+    return ratingSections.value
+        .filter(section => section.key !== "statistics")
+        .every(section => 
+            !ratings.value[section.key] || 
+            ratings.value[section.key].length === 0
+        );
+});
+
+const getCurrentSeason = () => {
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const nextYear = currentYear + 1;
+  
+  return `${currentYear}/${nextYear.toString().slice(2)}`;
+};
 
 onMounted(async () => {
     try {
@@ -78,16 +104,15 @@ onMounted(async () => {
         isLoading.value = false;
     }
 
-    setTimeout(() => {
-        document.querySelectorAll(".info-item__container:not(.statistics-container)").forEach(el => {
-            el.addEventListener("click", goToRatingPage);
-            el.style.cursor = "pointer";
-        });
-    }, 0);
+    await nextTick();
+    document.querySelectorAll(".link-container").forEach(el => {
+        el.addEventListener("click", goToRatingPage);
+        el.style.cursor = "pointer";
+    });
 });
 
 onBeforeUnmount(() => {
-    document.querySelectorAll(".info-item__container:not(.statistics-container)").forEach(el => {
+    document.querySelectorAll(".link-container").forEach(el => {
         el.removeEventListener("click", goToRatingPage);
     });
 });
@@ -136,6 +161,20 @@ const goToRatingPage = (event) => {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 30px;
+}
+
+.empty-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    height: 166px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #555;
+    padding: 20px;
+    background: #eeee;
+    border-radius: 8px;
 }
 
 .section-name {

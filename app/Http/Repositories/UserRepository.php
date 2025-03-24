@@ -73,7 +73,7 @@ class UserRepository extends CoreRepository
                 'users.name',
                 'users.surname',
                 'users.patronymic',
-                DB::raw("DATE_FORMAT(users.created_at, '%Y-%m-%d') as registration_date"),
+                DB::raw("DATE_FORMAT(users.created_at, '%d.%m.%Y') as registration_date"),
                 DB::raw("TIMESTAMPDIFF(YEAR, users.birth, CURDATE()) as age"),
                 'universities.name as university',
             ])
@@ -103,13 +103,10 @@ class UserRepository extends CoreRepository
             })
             ->select([
                 'users.id',
-                // Количество этапов
                 DB::raw('COUNT(DISTINCT stage_user.stage_id) as stages_count'),
 
-                // Количество гонок
                 DB::raw('COUNT(DISTINCT race_team.id) as races_count'), 
                 
-                // Среднее место
                 DB::raw('ROUND(COALESCE(AVG(
                     CASE 
                         WHEN race_team.place = 0 THEN CAST(REGEXP_SUBSTR(race_team.note, "[0-9]+") AS SIGNED) 
@@ -117,7 +114,6 @@ class UserRepository extends CoreRepository
                     END
                 ), 0), 1) as avg_place'),
 
-                // Победы в этапах
                 DB::raw('COUNT(DISTINCT CASE 
                             WHEN stage_team.result = (SELECT MAX(st2.result) 
                                                       FROM stage_team st2 
@@ -125,7 +121,6 @@ class UserRepository extends CoreRepository
                             THEN stage_user.stage_id 
                             END) as wins_stages'),
 
-                // Процент побед
                 DB::raw('CONCAT(ROUND(
                                 (COUNT(DISTINCT CASE 
                                     WHEN (race_team.place = 1 OR (race_team.place = 0 AND CAST(REGEXP_SUBSTR(race_team.note, "[0-9]+") AS SIGNED) = 1)) 
@@ -133,7 +128,6 @@ class UserRepository extends CoreRepository
                                 END) * 100.0) 
                                 / NULLIF(COUNT(DISTINCT race_team.id), 0), 1), "%") as win_rate'),
 
-                // Топ-3 финиши
                 DB::raw('COUNT(DISTINCT CASE 
                             WHEN (race_team.place IN (1, 2, 3) OR 
                                   (race_team.place = 0 AND CAST(REGEXP_SUBSTR(race_team.note, "[0-9]+") AS SIGNED) IN (1, 2, 3))) 
@@ -149,7 +143,7 @@ class UserRepository extends CoreRepository
     
     public function getRating($id)
     {
-        $currentYear =  2024; //date('Y');
+        $currentYear = date('Y');
     
         $result = $this->startConditions()
             ->leftJoin('stage_user', 'users.id', '=', 'stage_user.user_id')
@@ -163,10 +157,8 @@ class UserRepository extends CoreRepository
                      ->on('stage_user.team_id', '=', 'stage_team.team_id');
             })
             ->select([
-                // Всего гонок
                 DB::raw('COUNT(DISTINCT race_team.id) as total_races'),
 
-                // Среднее место в гонке
                 DB::raw('ROUND(COALESCE(AVG(
                     CASE 
                         WHEN race_team.place = 0 THEN CAST(REGEXP_SUBSTR(race_team.note, "[0-9]+") AS SIGNED) 
@@ -174,7 +166,6 @@ class UserRepository extends CoreRepository
                     END
                 ), 0), 1) as avg_place'),
 
-                // Процент побед
                 DB::raw('CONCAT(ROUND(
                     (COUNT(DISTINCT CASE 
                         WHEN (race_team.place = 1 OR (race_team.place = 0 AND CAST(REGEXP_SUBSTR(race_team.note, "[0-9]+") AS SIGNED) = 1)) 
@@ -182,7 +173,6 @@ class UserRepository extends CoreRepository
                     END) * 100.0) 
                     / NULLIF(COUNT(DISTINCT race_team.id), 0), 1), "%") as win_rate'),
 
-                // Победы в этапах
                 DB::raw('COUNT(DISTINCT CASE 
                             WHEN stage_team.result = (SELECT MAX(st2.result) 
                                                       FROM stage_team st2 
@@ -198,10 +188,10 @@ class UserRepository extends CoreRepository
         $data = [
             ['name' => 'Всего гонок', 'score' => $result->total_races ?? 0],
             ['name' => 'Среднее место в гонке', 'score' => $result->avg_place ?? 0],
-            ['name' => 'Процент побед в гоноках', 'score' => $result->win_rate ?? 0],
+            ['name' => 'Процент побед в гоноках', 'score' => $result->win_rate ?? "0%"],
             ['name' => 'Победы в этапах', 'score' => $result->wins_stages ?? 0]
         ];
-    
-        return response()->json($data);
+
+        return $data;
     }
 }

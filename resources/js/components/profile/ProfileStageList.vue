@@ -43,29 +43,10 @@ onMounted(async () => {
 
 <style scoped>
 .stage-list__container {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    grid-auto-rows: 205px;
     gap: 30px;
 }
 
-.error-text {
-    color: red;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 20px;
-}
-
-.empty-text {
-    color: #777;
-    font-weight: 500;
-    text-align: center;
-    margin-top: 20px;
-}
-
-@media (max-width: 1045px) {
-    .stage-list__container {
-        flex-wrap: nowrap;
-        flex-direction: column;
-    }
-}
 </style>

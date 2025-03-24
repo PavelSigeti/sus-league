@@ -75,7 +75,7 @@ class StageResultRepository extends CoreRepository
     }
     public function getUserPersonalRating($id)
     {
-        $currentYear = 2024; //now()->year; 
+        $currentYear = date('Y');
     
         $columns = [
             'users.id',
@@ -125,7 +125,7 @@ class StageResultRepository extends CoreRepository
 
     public function getUserTeamRating($id)
     {
-        $currentYear = 2024; //now()->year;
+        $currentYear = date('Y');
     
         $team = $this->startConditions()
             ->join('stage_user', function($join) {
@@ -195,7 +195,7 @@ class StageResultRepository extends CoreRepository
     
     public function getUserUniversityRating($id)
     {
-        $currentYear = 2024; //now()->year;
+        $currentYear = date('Y');
     
         $userUniversity = DB::table('users')
             ->where('id', $id)

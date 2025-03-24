@@ -41,11 +41,11 @@ onMounted(async () => {
     try {
         const response = await axios.get(`/api/user/${route.params.id}/statistics`);
         statistics.value = response.data;
-        isLoading.value = false;
     } catch (error) {
         console.error("Ошибка при загрузке статистики:", error);
+    } finally {
         isLoading.value = false;
-    }
+    };
 });
 </script>
 

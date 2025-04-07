@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Guest;
 
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\StageResultRepository;
-use App\Models\StageResult;
 use App\Models\StageTeam;
 use Illuminate\Support\Facades\DB;
 

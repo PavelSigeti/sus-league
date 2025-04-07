@@ -8,7 +8,7 @@
         <div class="list-item__result-row">
             Количество команд: {{ stage.participants }}
         </div>
-        <button 
+        <button
             class="btn btn-border btn-settings-280 mt10"
             @click="goToStage"
         >
@@ -64,7 +64,7 @@ const goToStage = () => {
     font-size: 17px;
     font-weight: 500;
     white-space: nowrap;
-    overflow: hidden;        
+    overflow: hidden;
     text-overflow: ellipsis;
 }
 

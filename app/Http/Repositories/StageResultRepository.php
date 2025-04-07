@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\DB;
 
 class StageResultRepository extends CoreRepository
 {
+    protected $year;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->year = date('Y');
+    }
+
     protected function getModelClass()
     {
         return Model::class;
@@ -27,7 +35,6 @@ class StageResultRepository extends CoreRepository
             ->groupBy('user_id')
             ->orderBy('total', 'DESC')
             ->paginate(50);
-
 
         return $result;
     }
@@ -75,23 +82,23 @@ class StageResultRepository extends CoreRepository
     }
     public function getUserPersonalRating($id)
     {
-        $currentYear = date('Y');
-    
         $columns = [
             'users.id',
             'users.name',
             'users.surname',
             DB::raw('SUM(result) as total')
         ];
-    
+
         $ratings = $this->startConditions()
             ->join('users', 'stage_results.user_id', '=', 'users.id')
-            ->whereYear('stage_results.created_at', $currentYear)
+//            ->whereYear('stage_results.created_at', $this->year) //TODO:: $this->year в остальных местах заменить
             ->select($columns)
             ->groupBy('users.id')
             ->orderBy('total', 'DESC')
             ->get();
-    
+
+        //TODO:: Все что ниже перенести в контроллер
+
         $rankedUsers = $ratings->map(function ($item, $index) use ($id) {
             return [
                 'name' => ($index + 1) . '. ' . $item->name . ' ' . $item->surname,
@@ -100,9 +107,9 @@ class StageResultRepository extends CoreRepository
                 'is_user' => $item->id == $id
             ];
         });
-    
+
         $userIndex = $rankedUsers->search(fn($item) => $item['user_id'] == $id);
-    
+
         if ($userIndex !== false) {
             if ($userIndex < 3) {
                 $result = $rankedUsers->slice(0, 4)->values();
@@ -114,7 +121,7 @@ class StageResultRepository extends CoreRepository
         } else {
             $result = $rankedUsers->slice(0, 3)->values();
         }
-    
+
         return response()->json($result->map(fn($item) => [
             'name' => $item['name'],
             'score' => $item['score'],
@@ -126,7 +133,7 @@ class StageResultRepository extends CoreRepository
     public function getUserTeamRating($id)
     {
         $currentYear = date('Y');
-    
+
         $team = $this->startConditions()
             ->join('stage_user', function($join) {
                 $join->on('stage_results.stage_id', '=', 'stage_user.stage_id');
@@ -139,17 +146,17 @@ class StageResultRepository extends CoreRepository
             ->groupBy('teams.id', 'teams.name')
             ->orderByDesc('participation')
             ->first();
-    
+
         if (!$team) {
             return response()->json([]);
         }
-    
+
         $columns = [
             'teams.id',
             'teams.name',
             DB::raw('SUM(result) as total')
         ];
-    
+
         $ratings = $this->startConditions()
             ->join('stage_user', function($join) {
                 $join->on('stage_results.stage_id', '=', 'stage_user.stage_id');
@@ -161,7 +168,7 @@ class StageResultRepository extends CoreRepository
             ->groupBy('teams.id')
             ->orderBy('total', 'DESC')
             ->get();
-    
+
         $rankedTeams = $ratings->map(function ($item, $index) use ($team) {
             return [
                 'name' => ($index + 1) . '. ' . $item->name,
@@ -170,9 +177,9 @@ class StageResultRepository extends CoreRepository
                 'is_user' => $item->id == $team->id
             ];
         });
-    
+
         $teamIndex = $rankedTeams->search(fn($item) => $item['team_id'] == $team->id);
-    
+
         if ($teamIndex !== false) {
             if ($teamIndex < 3) {
                 $result = $rankedTeams->slice(0, 4)->values();
@@ -184,33 +191,33 @@ class StageResultRepository extends CoreRepository
         } else {
             $result = $rankedTeams->slice(0, 3)->values();
         }
-    
+
         return response()->json($result->map(fn($item) => [
             'name' => $item['name'],
             'score' => $item['score'],
             'is_user' => $item['is_user']
         ]));
     }
-    
-    
+
+
     public function getUserUniversityRating($id)
     {
         $currentYear = date('Y');
-    
+
         $userUniversity = DB::table('users')
             ->where('id', $id)
             ->value('university_id');
-    
+
         if (!$userUniversity) {
             return response()->json([]);
         }
-    
+
         $columns = [
             'universities.id',
             'universities.name',
             DB::raw('SUM(result) as total')
         ];
-    
+
         $ratings = $this->startConditions()
             ->join('users', 'stage_results.user_id', '=', 'users.id')
             ->join('universities', 'users.university_id', '=', 'universities.id')
@@ -219,7 +226,7 @@ class StageResultRepository extends CoreRepository
             ->groupBy('universities.id')
             ->orderBy('total', 'DESC')
             ->get();
-    
+
         $rankedUniversities = $ratings->map(function ($item, $index) use ($userUniversity) {
             return [
                 'name' => ($index + 1) . '. ' . $item->name,
@@ -228,9 +235,9 @@ class StageResultRepository extends CoreRepository
                 'is_user' => $item->id == $userUniversity
             ];
         });
-    
+
         $universityIndex = $rankedUniversities->search(fn($item) => $item['university_id'] == $userUniversity);
-    
+
         if ($universityIndex !== false) {
             if ($universityIndex < 3) {
                 $result = $rankedUniversities->slice(0, 4)->values();
@@ -242,7 +249,7 @@ class StageResultRepository extends CoreRepository
         } else {
             $result = $rankedUniversities->slice(0, 3)->values();
         }
-    
+
         return response()->json($result->map(fn($item) => [
             'name' => $item['name'],
             'score' => $item['score'],

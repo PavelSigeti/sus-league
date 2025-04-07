@@ -62,7 +62,7 @@ class UserRepository extends CoreRepository
             ->leftJoin('universities', 'users.university_id', '=', 'universities.id')
             ->find($id);
 
-        return $result; 
+        return $result;
     }
 
     public function getProfile($id)
@@ -79,10 +79,10 @@ class UserRepository extends CoreRepository
             ])
             ->leftJoin('universities', 'users.university_id', '=', 'universities.id')
             ->find($id);
-    
+
         return $result;
     }
-    
+
 
     public function getStatistics($id)
     {
@@ -105,46 +105,46 @@ class UserRepository extends CoreRepository
                 'users.id',
                 DB::raw('COUNT(DISTINCT stage_user.stage_id) as stages_count'),
 
-                DB::raw('COUNT(DISTINCT race_team.id) as races_count'), 
-                
+                DB::raw('COUNT(DISTINCT race_team.id) as races_count'),
+
                 DB::raw('ROUND(COALESCE(AVG(
-                    CASE 
-                        WHEN race_team.place = 0 THEN CAST(REGEXP_SUBSTR(race_team.note, "[0-9]+") AS SIGNED) 
-                        ELSE race_team.place 
+                    CASE
+                        WHEN race_team.place = 0 THEN CAST(REGEXP_SUBSTR(race_team.note, "[0-9]+") AS SIGNED)
+                        ELSE race_team.place
                     END
                 ), 0), 1) as avg_place'),
 
-                DB::raw('COUNT(DISTINCT CASE 
-                            WHEN stage_team.result = (SELECT MAX(st2.result) 
-                                                      FROM stage_team st2 
-                                                      WHERE st2.stage_id = stage_team.stage_id) 
-                            THEN stage_user.stage_id 
+                DB::raw('COUNT(DISTINCT CASE
+                            WHEN stage_team.result = (SELECT MAX(st2.result)
+                                                      FROM stage_team st2
+                                                      WHERE st2.stage_id = stage_team.stage_id)
+                            THEN stage_user.stage_id
                             END) as wins_stages'),
 
                 DB::raw('CONCAT(ROUND(
-                                (COUNT(DISTINCT CASE 
-                                    WHEN (race_team.place = 1 OR (race_team.place = 0 AND CAST(REGEXP_SUBSTR(race_team.note, "[0-9]+") AS SIGNED) = 1)) 
-                                    THEN race_team.id 
-                                END) * 100.0) 
+                                (COUNT(DISTINCT CASE
+                                    WHEN (race_team.place = 1 OR (race_team.place = 0 AND CAST(REGEXP_SUBSTR(race_team.note, "[0-9]+") AS SIGNED) = 1))
+                                    THEN race_team.id
+                                END) * 100.0)
                                 / NULLIF(COUNT(DISTINCT race_team.id), 0), 1), "%") as win_rate'),
 
-                DB::raw('COUNT(DISTINCT CASE 
-                            WHEN (race_team.place IN (1, 2, 3) OR 
-                                  (race_team.place = 0 AND CAST(REGEXP_SUBSTR(race_team.note, "[0-9]+") AS SIGNED) IN (1, 2, 3))) 
-                            THEN race_team.id 
+                DB::raw('COUNT(DISTINCT CASE
+                            WHEN (race_team.place IN (1, 2, 3) OR
+                                  (race_team.place = 0 AND CAST(REGEXP_SUBSTR(race_team.note, "[0-9]+") AS SIGNED) IN (1, 2, 3)))
+                            THEN race_team.id
                             END) as top3_count'),
             ])
             ->where('users.id', $id)
             ->groupBy('users.id')
             ->first();
-    
+
         return $result;
     }
-    
+
     public function getRating($id)
     {
         $currentYear = date('Y');
-    
+
         $result = $this->startConditions()
             ->leftJoin('stage_user', 'users.id', '=', 'stage_user.user_id')
             ->leftJoin('races', 'stage_user.stage_id', '=', 'races.stage_id')
@@ -160,31 +160,33 @@ class UserRepository extends CoreRepository
                 DB::raw('COUNT(DISTINCT race_team.id) as total_races'),
 
                 DB::raw('ROUND(COALESCE(AVG(
-                    CASE 
-                        WHEN race_team.place = 0 THEN CAST(REGEXP_SUBSTR(race_team.note, "[0-9]+") AS SIGNED) 
-                        ELSE race_team.place 
+                    CASE
+                        WHEN race_team.place = 0 THEN CAST(REGEXP_SUBSTR(race_team.note, "[0-9]+") AS SIGNED)
+                        ELSE race_team.place
                     END
                 ), 0), 1) as avg_place'),
 
                 DB::raw('CONCAT(ROUND(
-                    (COUNT(DISTINCT CASE 
-                        WHEN (race_team.place = 1 OR (race_team.place = 0 AND CAST(REGEXP_SUBSTR(race_team.note, "[0-9]+") AS SIGNED) = 1)) 
-                        THEN race_team.id 
-                    END) * 100.0) 
+                    (COUNT(DISTINCT CASE
+                        WHEN (race_team.place = 1 OR (race_team.place = 0 AND CAST(REGEXP_SUBSTR(race_team.note, "[0-9]+") AS SIGNED) = 1))
+                        THEN race_team.id
+                    END) * 100.0)
                     / NULLIF(COUNT(DISTINCT race_team.id), 0), 1), "%") as win_rate'),
 
-                DB::raw('COUNT(DISTINCT CASE 
-                            WHEN stage_team.result = (SELECT MAX(st2.result) 
-                                                      FROM stage_team st2 
-                                                      WHERE st2.stage_id = stage_team.stage_id) 
-                            THEN stage_user.stage_id 
+                DB::raw('COUNT(DISTINCT CASE
+                            WHEN stage_team.result = (SELECT MAX(st2.result)
+                                                      FROM stage_team st2
+                                                      WHERE st2.stage_id = stage_team.stage_id)
+                            THEN stage_user.stage_id
                             END) as wins_stages'),
             ])
             ->where('users.id', $id)
             ->whereYear('races.created_at', $currentYear)
             ->groupBy('users.id')
             ->first();
-    
+
+        //TODO:: Внизу в контроллер
+
         $data = [
             ['name' => 'Всего гонок', 'score' => $result->total_races ?? 0],
             ['name' => 'Среднее место в гонке', 'score' => $result->avg_place ?? 0],

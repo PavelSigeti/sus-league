@@ -48,9 +48,27 @@ class UserController extends Controller
     }
     
     public function getRating($id)
-    {
-        return $this->userRepository->getRating($id);
+{
+    $year = now()->year;
+    
+    $stats = $this->userRepository->getUserRatingStats($id, $year);
+    
+    if (!$stats) {
+        return [
+            ['name' => 'Всего гонок', 'score' => 0],
+            ['name' => 'Среднее место в гонке', 'score' => 0],
+            ['name' => 'Процент побед в гонках', 'score' => '0%'],
+            ['name' => 'Победы в этапах', 'score' => 0]
+        ];
     }
+
+    return [
+        ['name' => 'Всего гонок', 'score' => $stats->total_races],
+        ['name' => 'Среднее место в гонке', 'score' => $stats->avg_place],
+        ['name' => 'Процент побед в гонках', 'score' => round($stats->win_rate_percent, 1) . '%'],
+        ['name' => 'Победы в этапах', 'score' => $stats->wins_stages]
+    ];
+}
 
     public function settings()
     {

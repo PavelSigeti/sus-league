@@ -586,9 +586,13 @@
       "resources/js/app.js"
     ]
   },
-  "AppForgetPassword.css": {
-    "file": "assets/AppForgetPassword.046e045c.css",
-    "src": "AppForgetPassword.css"
+  "resources/js/views/admin/users/user.css": {
+    "file": "assets/user.27f8879f.css",
+    "src": "resources/js/views/admin/users/user.css"
+  },
+  "AppResultTable.css": {
+    "file": "assets/AppResultTable.9bffe814.css",
+    "src": "AppResultTable.css"
   },
   "AppLoader.css": {
     "file": "assets/AppLoader.61f5e7d7.css",
@@ -598,71 +602,67 @@
     "file": "assets/Home.95f73524.css",
     "src": "resources/js/views/Home.css"
   },
-  "AppResultTable.css": {
-    "file": "assets/AppResultTable.9bffe814.css",
-    "src": "AppResultTable.css"
+  "resources/js/views/user/stage/StagePage.css": {
+    "file": "assets/StagePage.b1208516.css",
+    "src": "resources/js/views/user/stage/StagePage.css"
+  },
+  "resources/js/views/admin/Docs.css": {
+    "file": "assets/Docs.34cf1bbc.css",
+    "src": "resources/js/views/admin/Docs.css"
+  },
+  "AppForgetPassword.css": {
+    "file": "assets/AppForgetPassword.046e045c.css",
+    "src": "AppForgetPassword.css"
   },
   "resources/js/views/user/stage/StageUser.css": {
     "file": "assets/StageUser.b2901499.css",
     "src": "resources/js/views/user/stage/StageUser.css"
   },
+  "resources/js/views/PublicPage.css": {
+    "file": "assets/PublicPage.16181df9.css",
+    "src": "resources/js/views/PublicPage.css"
+  },
+  "resources/js/views/UserProfile.css": {
+    "file": "assets/UserProfile.314e20fc.css",
+    "src": "resources/js/views/UserProfile.css"
+  },
   "vue-select.css": {
     "file": "assets/vue-select.b0fac2a1.css",
     "src": "vue-select.css"
   },
-  "resources/js/views/admin/users/user.css": {
-    "file": "assets/user.27f8879f.css",
-    "src": "resources/js/views/admin/users/user.css"
+  "AppEditor.css": {
+    "file": "assets/AppEditor.cf27cbd8.css",
+    "src": "AppEditor.css"
   },
   "resources/scss/app-media.scss": {
     "file": "assets/app-media.c36c6f20.css",
     "src": "resources/scss/app-media.scss",
     "isEntry": true
   },
-  "resources/js/views/UserProfile.css": {
-    "file": "assets/UserProfile.314e20fc.css",
-    "src": "resources/js/views/UserProfile.css"
-  },
-  "resources/js/views/PublicPage.css": {
-    "file": "assets/PublicPage.16181df9.css",
-    "src": "resources/js/views/PublicPage.css"
-  },
-  "resources/js/views/admin/Docs.css": {
-    "file": "assets/Docs.34cf1bbc.css",
-    "src": "resources/js/views/admin/Docs.css"
-  },
-  "AppEditor.css": {
-    "file": "assets/AppEditor.cf27cbd8.css",
-    "src": "AppEditor.css"
-  },
-  "resources/js/views/admin/DocsCancel.css": {
-    "file": "assets/DocsCancel.66dfdde9.css",
-    "src": "resources/js/views/admin/DocsCancel.css"
-  },
   "resources/scss/app.scss": {
     "file": "assets/app.372e21aa.css",
     "src": "resources/scss/app.scss",
     "isEntry": true
   },
-  "resources/js/app.css": {
-    "file": "assets/app.337e3536.css",
-    "src": "resources/js/app.css"
-  },
-  "AppDashStages.css": {
-    "file": "assets/AppDashStages.9a939892.css",
-    "src": "AppDashStages.css"
-  },
   "resources/js/views/user/Settings.css": {
     "file": "assets/Settings.ac9ce209.css",
     "src": "resources/js/views/user/Settings.css"
   },
-  "resources/js/views/user/stage/StagePage.css": {
-    "file": "assets/StagePage.b1208516.css",
-    "src": "resources/js/views/user/stage/StagePage.css"
+  "resources/js/app.css": {
+    "file": "assets/app.337e3536.css",
+    "src": "resources/js/app.css"
   },
   "resources/js/views/Dashboard.css": {
     "file": "assets/Dashboard.a745b450.css",
     "src": "resources/js/views/Dashboard.css"
+  },
+  "resources/js/views/admin/DocsCancel.css": {
+    "file": "assets/DocsCancel.66dfdde9.css",
+    "src": "resources/js/views/admin/DocsCancel.css"
+  },
+  "AppDashStages.css": {
+    "file": "assets/AppDashStages.9a939892.css",
+    "src": "AppDashStages.css"
   },
   "resources/js/views/admin/stage/edit.css": {
     "file": "assets/edit.8445e7de.css",

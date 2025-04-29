@@ -115,11 +115,13 @@ class UserRepository extends CoreRepository
                 ), 0), 1) as avg_place'),
 
                 DB::raw('COUNT(DISTINCT CASE
-                            WHEN stage_team.result = (SELECT MAX(st2.result)
-                                                      FROM stage_team st2
-                                                      WHERE st2.stage_id = stage_team.stage_id)
-                            THEN stage_user.stage_id
-                            END) as wins_stages'),
+                    WHEN stage_results.result = (
+                        SELECT MAX(sr2.result)
+                        FROM stage_results sr2
+                        WHERE sr2.stage_id = stage_results.stage_id
+                    )
+                    THEN stage_results.stage_id
+                    END) as wins_stages'),
 
                 DB::raw('CONCAT(ROUND(
                                 (COUNT(DISTINCT CASE
@@ -154,6 +156,10 @@ class UserRepository extends CoreRepository
                 $join->on('stage_user.stage_id', '=', 'stage_team.stage_id')
                      ->on('stage_user.team_id', '=', 'stage_team.team_id');
             })
+            ->leftJoin('stage_results', function ($join) {
+                $join->on('stage_user.user_id', '=', 'stage_results.user_id')
+                     ->on('stage_user.stage_id', '=', 'stage_results.stage_id');
+            })
             ->select([
                 DB::raw('COUNT(DISTINCT race_team.id) as total_races'),
                 DB::raw('ROUND(COALESCE(AVG(
@@ -169,17 +175,19 @@ class UserRepository extends CoreRepository
                     END) * 100.0)
                     / NULLIF(COUNT(DISTINCT race_team.id), 0), 1) as win_rate_percent'),
                 DB::raw('COUNT(DISTINCT CASE
-                    WHEN stage_team.result = (SELECT MAX(st2.result)
-                                              FROM stage_team st2
-                                              WHERE st2.stage_id = stage_team.stage_id)
-                    THEN stage_user.stage_id
-                    END) as wins_stages'),
+                    WHEN stage_results.result = (
+                        SELECT MAX(sr2.result)
+                        FROM stage_results sr2
+                        WHERE sr2.stage_id = stage_results.stage_id
+                    )
+                    THEN stage_results.stage_id
+                END) as wins_stages'),
             ])
             ->where('users.id', $userId)
             ->whereYear('races.created_at', $year)
             ->groupBy('users.id')
             ->first();
-
+    
         return $result;
-    }
+    }    
 }

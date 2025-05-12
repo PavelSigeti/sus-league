@@ -25,7 +25,7 @@
                 <div class="col-12 df">
                     <div class="home-container">
                         <div class="home-main">
-                            <h1>Добро пожаловать на <br>SUS LEAGUE: SEASON ONE</h1>
+                            <h1>Добро пожаловать на <br>SUS LEAGUE: SEASON TWO</h1>
                             <div class="btn btn-default" @click="register = true">Принять участие</div>
                         </div>
                         <div class="home-links">

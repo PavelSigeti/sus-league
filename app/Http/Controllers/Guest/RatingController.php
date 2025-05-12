@@ -16,32 +16,19 @@ class RatingController extends Controller
         $this->stageResultRepository = app(StageResultRepository::class);
     }
 
-    public function usersRating()
+    public function usersRating($year = null)
     {
-        return $this->stageResultRepository->getUsersRating();
+        return $this->stageResultRepository->getUsersRating($year);
     }
 
-    public function universityRating()
+    public function universityRating($year = null)
     {
-        return $this->stageResultRepository->getUniversityRating();
+        return $this->stageResultRepository->getUniversityRating($year);
     }
 
-    public function teamRating()
+    public function teamRating($year = null)
     {
-        $columns = [
-            'teams.name',
-            DB::raw('SUM(result) as total')
-        ];
-
-
-        $result = StageTeam::query()
-            ->join('teams', 'stage_team.team_id', '=', 'teams.id')
-            ->select($columns)
-            ->groupBy('team_id')
-            ->orderBy('total', 'DESC')
-            ->paginate(10);
-
-        return $result;
+        return $this->stageResultRepository->getTeamRating($year);
 
     }
 }

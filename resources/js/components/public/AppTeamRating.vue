@@ -37,7 +37,7 @@ import AppLoader from "../ui/AppLoader.vue";
 const loading = ref(false);
 const currentYear = new Date().getFullYear();
 const selectedYear = ref(currentYear.toString());
-const availableYears = ref([2024, 2025]);
+const availableYears = ref([2024, 2025, 2026]);
 const data = ref(false);
 
 const getLink = () => {
